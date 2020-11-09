@@ -4,30 +4,31 @@
         ViewBag.Title = "Edit";
     }
 *@
-<h2>Edit article</h2>
+<h2>Edit School Group</h2>
 
 <form method="post" action="/Groups/Edit/@Model.Id">
 
     @Html.HttpMethodOverride(HttpVerbs.Put)
 
-    @Html.Hidden("Id");
-    @*@Html.HiddenFor(m => m.Id)*@
+    @*@Html.Hidden("Id");*@
+    @Html.HiddenFor(m => m.Id)
 
-    @Html.Label("Title", "Article Title")
+    @Html.Label("Title", "School group title")
     <br />
-    @Html.Editor("Title")  @* o sa si preia din baza de date si afiseaza campul completat*@
+    @* Se preia valoarea din baza de date si se afiseaza campul completat.*@
+    @Html.Editor("Title")
     <br /><br />
-    @Html.Label("Content", "Article content")
+    @Html.Label("Description", "School group description")
     <br />
-    @Html.Editor("Content", new { htmlAttributes = new { @class = "form-control" } })
+    @Html.Editor("Description", new { htmlAttributes = new { @class = "form-control" } })
     <br /><br />
 
-    @Html.HiddenFor(m => m.Date)
+    @Html.HiddenFor(m => m.DateCreated)
 
-    <label>Selectati categoria</label>
+    <label>Select corresponding category:</label>
     @Html.DropDownListFor(m => m.CategoryId,
     new SelectList(Model.Categ, "Value", "Text"),
-    "Selectati categoria", new { @class = "form-control" })
+    "Select category", new { @class = "form-control" })
     <br />
     <button class="btn btn-sm btn-success" type="submit">Submit group changes</button>
 </form>

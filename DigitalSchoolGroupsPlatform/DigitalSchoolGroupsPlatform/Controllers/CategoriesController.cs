@@ -11,10 +11,10 @@ namespace DigitalSchoolGroupsPlatform.Controllers
     {
         private Models.AppContext db = new Models.AppContext();
 
-        // Metoda Index afiseaza toate categoriile, ordonate alfabetic dupa numele categoriei.
-        // GET: Categories
+        // ----------READ----------
         public ActionResult Index()
         {
+            // Order categories in alphabetical order.
             var categories = from category in db.Categories
                              orderby category.CategoryName
                              select category;
@@ -22,7 +22,7 @@ namespace DigitalSchoolGroupsPlatform.Controllers
             return View();
         }
 
-        // Metoda Show afiseaza o singura categorie.
+        // ----------READ ONE----------
         public ActionResult Show(int id)
         {
             Category category = db.Categories.Find(id);
@@ -30,7 +30,7 @@ namespace DigitalSchoolGroupsPlatform.Controllers
             return View();
         }
 
-        // Metoda New creeaza o noua categorie.
+        // ----------CREATE----------
         public ActionResult New()
         {
             return View();
@@ -51,7 +51,7 @@ namespace DigitalSchoolGroupsPlatform.Controllers
             }
         }
 
-        // Metoda Edit modifica numele unei categorii.
+        // ----------UPDATE----------
         public ActionResult Edit(int id)
         {
             Category category = db.Categories.Find(id);
@@ -79,7 +79,7 @@ namespace DigitalSchoolGroupsPlatform.Controllers
             }
         }
 
-        // Metoda Delete sterge o categorie din baza de date.
+        // ----------DELETE----------
         [HttpDelete]
         public ActionResult Delete(int id)
         {

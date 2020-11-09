@@ -7,6 +7,7 @@ using System.Web.Mvc;
 
 namespace DigitalSchoolGroupsPlatform.Models
 {
+    // Class defining a school group.
     public class Group
     {
         [Key]
@@ -15,21 +16,19 @@ namespace DigitalSchoolGroupsPlatform.Models
         public string Title { get; set; }
         [Required]
         [DataType(DataType.MultilineText)]
-        public string Content { get; set; }
-        public DateTime Date { get; set; }
+        public string Description { get; set; }
+        public DateTime DateCreated { get; set; }
 
-        // Foreign Key
-        // Cuvantul Category din nume face o mapare --> stie ca vine din modelul Category,
-        // deci nu mai trebuie sa scriem Foreign Key.
+        // Foreign Key "CategoryId", mapped to Category Model 
+        // -> no need to explicitly state [Foreign Key]
         public int CategoryId { get; set; }
 
-        // relatia de cheie externa
+        // Foreign Key Relationship: One (category) - Many (groups)
         public virtual Category Category { get; set; }
         //public virtual ICollection<Comment> Comments { get; set; }
 
-        // Denumim Categ (nu Category / Categories), sa nu il confundam!
-        // Categ tine o lista de categorii.
-        // Tinem cu cheie si valoare (SelectListItem).
+        // Declare Categ array for the categories list.
+        // Hold as key-value set (SelectListItem).
         public IEnumerable<SelectListItem> Categ { get; set; }
     }
 }

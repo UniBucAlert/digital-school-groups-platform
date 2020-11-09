@@ -13,6 +13,7 @@ namespace DigitalSchoolGroupsPlatform.Models
         [Required]
         public string CategoryName { get; set; }
 
+        // Foreign Key Relationship: One (category) - Many (groups)
         public virtual ICollection<Group> Groups { get; set; }
     }
 }

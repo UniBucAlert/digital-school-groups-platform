@@ -9,13 +9,11 @@ namespace DigitalSchoolGroupsPlatform.Controllers
 {
     public class GroupsController : Controller
     {
-        // Am acces la elementele din BD prin instanta ArticleDBContext.
         private Models.AppContext db = new Models.AppContext();
 
-        // GET: Groups
+        // ----------READ----------
         public ActionResult Index()
         {
-            // JOIN facut de framework in spate (pt fiecare articol, join cu categorii si ia categoria)
             var groups = db.Groups.Include("Category");
             ViewBag.Groups = groups;
 
@@ -27,44 +25,42 @@ namespace DigitalSchoolGroupsPlatform.Controllers
             return View();
         }
 
-        // GET implicit
+        // ----------CREATE----------
         public ActionResult New()
         {
             Group group = new Group();
             group.Categ = GetAllCategories();
 
-            /* // before:
-            var categories = from category in db.Categories
-                             select category;
-
-            ViewBag.Categories = categories;
-            */
-            // Atentie daca pasam View() o sa dea eroare ca are categoriile null!
-            // Trebuie sa trimit ca argument si categoriile.
-            // Trimit article si e ok ca are si categoriile!
-            // adaugam @model ArticlesApp.Models.Article la inceput in View.
+            // Atentie: daca pasam View() => eroare - categoriile null!
+            // Trebuie trimise ca argument si categoriile!
+            // Se trimite "group" ca param si e okay - contine si categoriile.
+            // Se adauga @model DigitalSchoolGroupsPlatform.Models.Group la inceput in View.
             return View(group);
         }
 
         [HttpPost]
         public ActionResult New(Group group)
         {
-            group.Date = DateTime.Now;
+            // Set DateCreated as the current date.
+            group.DateCreated = DateTime.Now;
 
             try
             {
                 db.Groups.Add(group);
                 db.SaveChanges();
-                TempData["message"] = "Articolul a fost adaugat.";
+                TempData["message"] = "The group has been successfully created.";
                 return RedirectToAction("Index");
             }
             catch (Exception e)
             {
-                return View(group);   // nu mai punem utilizatorul sa scrie inca o data ce a scris inainte
-                // starea obiectului este pastrata!
+                return View(group);
+                // Obs: nu returnam View() pt a nu mai punee utilizatorul sa scrie 
+                // inca o data ceea ce a scris inainte.
+                // Starea obiectului este pastrata!
             }
         }
 
+        // ----------READ ONE----------
         public ActionResult Show(int id)
         {
             Group group = db.Groups.Find(id);
@@ -74,18 +70,11 @@ namespace DigitalSchoolGroupsPlatform.Controllers
             return View();
         }
 
+        // ----------UPDATE----------
         public ActionResult Edit(int id)
         {
             Group group = db.Groups.Find(id);
             group.Categ = GetAllCategories();
-            /*
-            ViewBag.Article = article;
-            ViewBag.Category = article.Category;
-
-            var categories = from category in db.Categories
-                             select category;
-            ViewBag.Categories = categories;
-            */
             return View(group);
         }
 
@@ -98,12 +87,8 @@ namespace DigitalSchoolGroupsPlatform.Controllers
                 if (TryUpdateModel(group))
                 {
                     group = requestGroup;
-                    /* article.Title = requestArticle.Title;
-                    article.Content = requestArticle.Content;
-                    article.Date = requestArticle.Date;
-                    article.CategoryId = requestArticle.CategoryId; */
                     db.SaveChanges();
-                    TempData["message"] = "Articolul a fost editat";
+                    TempData["message"] = "The group has been successfully modified.";
                     return RedirectToAction("Index");
                 }
                 return View(requestGroup);
@@ -114,6 +99,7 @@ namespace DigitalSchoolGroupsPlatform.Controllers
             }
         }
 
+        // ----------DELETE----------
         [HttpDelete]
         public ActionResult Delete(int id)
         {
@@ -154,7 +140,7 @@ namespace DigitalSchoolGroupsPlatform.Controllers
             }
             */
 
-            // returnam lista de categorii
+            // Return the categories list.
             return selectList;
         }
     }
