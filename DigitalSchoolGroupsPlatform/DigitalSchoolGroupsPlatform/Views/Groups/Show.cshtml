@@ -1,0 +1,26 @@
+﻿@{
+    ViewBag.Title = "Show";
+}
+<br />
+<a href="/Articles/Index">Back to article</a>
+<br /><br />
+<div class="panel panel-default">
+    <div class="panel-heading">@ViewBag.Group.Title</div>
+    <div class="panel-body">
+        Continut articol: <strong>@ViewBag.Group.Content</strong>
+        <br />
+        <span class="label label-success">@ViewBag.Group.Date</span>
+        <br />
+        <i class="glyphicon glyphicon-globe"></i> @ViewBag.Category.CategoryName
+        <br />
+        <hr>
+        <a class="btn btn-success pull-left" href="/Groups/Edit/@ViewBag.Group.Id">
+            Modify article
+        </a>
+
+        <form method="post" action="/Articles/Delete/@ViewBag.Group.Id">
+            @Html.HttpMethodOverride(HttpVerbs.Delete)
+            <button class="btn btn-danger pull-right" type="submit">Sterge articol</button>
+        </form>
+    </div>
+</div>

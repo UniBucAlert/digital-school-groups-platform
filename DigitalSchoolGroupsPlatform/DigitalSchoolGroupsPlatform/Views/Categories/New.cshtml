@@ -1,0 +1,15 @@
+﻿
+@{
+    ViewBag.Title = "New";
+}
+
+<h2>New category</h2>
+
+<form method="post" action="/Categories/New">
+    <label>Category name</label>
+    <br />
+    <input type="text" name="CategoryName" />
+    <br />
+
+    <button class="btn btn-success" type="submit">Add category</button>
+</form>

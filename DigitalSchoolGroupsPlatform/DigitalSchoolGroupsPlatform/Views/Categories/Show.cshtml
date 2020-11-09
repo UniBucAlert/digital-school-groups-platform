@@ -1,0 +1,22 @@
+﻿
+@{
+    ViewBag.Title = "Categories Show";
+}
+
+<h1>@ViewBag.Title</h1>
+
+<h2>@ViewBag.Category.CategoryName</h2>
+
+<a href="/Categories/Edit/@ViewBag.Category.CategoryId">Edit category</a>
+
+<form method="post" action="/Categories/Delete/@ViewBag.Category.CategoryId">
+    @Html.HttpMethodOverride(HttpVerbs.Delete)
+
+    <button class="btn btn-success" type="submit">Delete category</button>
+</form>
+
+<hr />
+<a href="/Categories/Index">Back to categories index</a>
+<br />
+<hr />
+<br />
