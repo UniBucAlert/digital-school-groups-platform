@@ -25,7 +25,7 @@ namespace DigitalSchoolGroupsPlatform.Models
 
         // Foreign Key Relationship: One (category) - Many (groups)
         public virtual Category Category { get; set; }
-        //public virtual ICollection<Comment> Comments { get; set; }
+        public virtual ICollection<Message> Messages { get; set; }
 
         // Declare Categ array for the categories list.
         // Hold as key-value set (SelectListItem).

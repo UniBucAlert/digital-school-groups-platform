@@ -195,10 +195,10 @@
     <Content Include="Views\Groups\New.cshtml" />
     <Content Include="Views\Groups\Edit.cshtml" />
     <Content Include="Views\Groups\Show.cshtml" />
+    <Content Include="Views\Messages\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Activities\" />
-    <Folder Include="Views\Messages\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

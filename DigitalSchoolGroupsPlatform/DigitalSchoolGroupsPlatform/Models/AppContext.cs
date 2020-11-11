@@ -19,6 +19,6 @@ namespace DigitalSchoolGroupsPlatform.Models
         // standard ca obiectul sa fie pluralizat
         public DbSet<Group> Groups { get; set; }
         public DbSet<Category> Categories { get; set; }
-        //public DbSet<Comment> Comments { get; set; }
+        public DbSet<Message> Messages { get; set; }
     }
 }
