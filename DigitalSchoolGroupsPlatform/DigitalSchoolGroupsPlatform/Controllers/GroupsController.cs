@@ -41,15 +41,23 @@ namespace DigitalSchoolGroupsPlatform.Controllers
         [HttpPost]
         public ActionResult New(Group group)
         {
+            group.Categ = GetAllCategories();
             // Set DateCreated as the current date.
             group.DateCreated = DateTime.Now;
 
             try
             {
-                db.Groups.Add(group);
-                db.SaveChanges();
-                TempData["message"] = "The group has been successfully created.";
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    db.Groups.Add(group);
+                    db.SaveChanges();
+                    TempData["message"] = "The group has been successfully created.";
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    return View(group);
+                }
             }
             catch (Exception e)
             {
@@ -67,7 +75,7 @@ namespace DigitalSchoolGroupsPlatform.Controllers
             ViewBag.Group = group;
             ViewBag.Category = group.Category;
 
-            return View();
+            return View(group);
         }
 
         // ----------UPDATE----------
@@ -81,17 +89,29 @@ namespace DigitalSchoolGroupsPlatform.Controllers
         [HttpPut]
         public ActionResult Edit(int id, Group requestGroup)
         {
+            requestGroup.Categ = GetAllCategories();
             try
             {
-                Group group = db.Groups.Find(id);
-                if (TryUpdateModel(group))
+                if (ModelState.IsValid)
                 {
-                    group = requestGroup;
-                    db.SaveChanges();
-                    TempData["message"] = "The group has been successfully modified.";
-                    return RedirectToAction("Index");
+                    Group group = db.Groups.Find(id);
+                    if (TryUpdateModel(group))
+                    {
+                        group = requestGroup;
+                        db.SaveChanges();
+                        TempData["message"] = "The group has been successfully modified.";
+                        return RedirectToAction("Index");
+                    }
+                    else
+                    {
+                        return View(requestGroup);
+                    }
                 }
-                return View(requestGroup);
+                else
+                {
+                    return View(requestGroup);
+                }
+
             }
             catch (Exception e)
             {

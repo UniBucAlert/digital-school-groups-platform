@@ -4,28 +4,32 @@
     Se foloseste cu m mare - @Model. ...
 *@
 
-@{
-    ViewBag.Title = "New";
-}
-
 <h2>Create new group</h2>
 
-<form method="post" action="/Groups/New">
+@* POST implicit *@
+@using (Html.BeginForm(actionName: "New", controllerName: "Groups"))
+{
+    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
 
     @Html.Label("Title", "School group title")
     <br />
     @Html.TextBox("Title", null, new { @class = "form-control" })
+    @* string validation message lasam null si preia mesajul din model *@
+    @Html.ValidationMessageFor(m => m.Title, null, new { @class = "text-danger" })
     <br /><br />
+
     @Html.Label("Description", "School group description")
     <br />
     @Html.TextBox("Description", null, new { @class = "form-control" })
+    @Html.ValidationMessage("Description", "", new { @class = "text-danger" })
     <br /><br />
 
     @Html.Label("Select corresponding category:")
 
     @* m vine de la model *@
     @Html.DropDownListFor(m => m.CategoryId, new SelectList(Model.Categ, "Value", "Text"),
-        "Select category", new { @class = "form-control" })
+            "Select category", new { @class = "form-control" })
+    @Html.ValidationMessage("CategoryId", null, new { @class = "text-danger" })
 
     @* name o sa fie CategoryId si ce este in value se paseaza catre server pe cheia CategoryId
             name este atributul pe care il trimite catre controller prin post
@@ -40,4 +44,4 @@
     <br />
 
     <button class="btn btn-success" type="submit">Create group</button>
-</form>
+}

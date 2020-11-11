@@ -196,6 +196,7 @@
     <Content Include="Views\Groups\Edit.cshtml" />
     <Content Include="Views\Groups\Show.cshtml" />
     <Content Include="Views\Messages\Edit.cshtml" />
+    <Content Include="Views\Shared\GroupInfo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Activities\" />

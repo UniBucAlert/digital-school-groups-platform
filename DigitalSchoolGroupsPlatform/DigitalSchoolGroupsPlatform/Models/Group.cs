@@ -12,15 +12,20 @@ namespace DigitalSchoolGroupsPlatform.Models
     {
         [Key]
         public int Id { get; set; }
-        [Required]
+
+        [Required(ErrorMessage = "Group title is mandatory!")]
+        [StringLength(100, ErrorMessage = 
+            "Group title cannot contain more than 100 characters!")]
         public string Title { get; set; }
-        [Required]
+
+        [Required(ErrorMessage = "Group description is mandatory!")]
         [DataType(DataType.MultilineText)]
         public string Description { get; set; }
         public DateTime DateCreated { get; set; }
 
         // Foreign Key "CategoryId", mapped to Category Model 
         // -> no need to explicitly state [Foreign Key]
+        [Required(ErrorMessage = "Group category is mandatory!")]
         public int CategoryId { get; set; }
 
         // Foreign Key Relationship: One (category) - Many (groups)

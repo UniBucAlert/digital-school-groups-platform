@@ -7,20 +7,15 @@
 
 <h1>@ViewBag.Message</h1>
 
-@foreach (var group in ViewBag.Groups)
+@foreach (DigitalSchoolGroupsPlatform.Models.Group group in ViewBag.Groups)
 {
     <div class="panel panel-default">
-        <div class="panel-heading">@group.Title</div>
-        <div class="panel-body">
-            Continut articol: <strong>@group.Description</strong>
-            <br />
-            <span class="label label-success">since: @group.DateCreated</span>
-            <br />
-            <i class="glyphicon glyphicon-globe"></i> @group.Category.CategoryName
-        </div>
+        
+        @Html.Partial("GroupInfo", group)
+
         <div class="panel panel-footer">
             <a class="btn btn-success btn-sm" href="/Groups/Show/@group.Id">Show group</a>
-            <a class="btn btn-success btn-sm" href="/Groups/Edit/@group.Id">Edit group</a>
+            @*<a class="btn btn-success btn-sm" href="/Groups/Edit/@group.Id">Edit group</a>*@
         </div>
     </div>
 }

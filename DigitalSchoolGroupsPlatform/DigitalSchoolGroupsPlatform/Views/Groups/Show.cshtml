@@ -1,32 +1,35 @@
-﻿@{
-    ViewBag.Title = "Show";
-}
+﻿@model DigitalSchoolGroupsPlatform.Models.Group
+@*
+    @{
+        ViewBag.Title = "Show";
+    }
+*@
 <br />
 <a href="/Groups/Index">Back to groups main page</a>
 <br /><br />
 <div class="panel panel-default">
-    <div class="panel-heading">@ViewBag.Group.Title</div>
-    <div class="panel-body">
-        Group Description: <strong>@ViewBag.Group.Description</strong>
-        <br />
-        <span class="label label-success">since: @ViewBag.Group.DateCreated</span>
-        <br />
-        <i class="glyphicon glyphicon-globe"></i> @ViewBag.Category.CategoryName
-        <br />
-        <hr>
-        <a class="btn btn-success pull-left" href="/Groups/Edit/@ViewBag.Group.Id">
+    @Html.Partial("GroupInfo", Model)
+    <div class="panel-footer">
+        <a class="btn btn-success pull-left" href="/Groups/Edit/@Model.Id">
             Modify school group
         </a>
 
-        <form method="post" action="/Groups/Delete/@ViewBag.Group.Id">
+        @using (Html.BeginForm(actionName: "Delete", controllerName: "Groups",
+            method: FormMethod.Post, routeValues: new { id = Model.Id }))
+        {
             @Html.HttpMethodOverride(HttpVerbs.Delete)
-            <button class="btn btn-danger pull-right" type="submit">Delete school group</button>
-        </form>
+            
+            <button class="btn btn-danger pull-right" type="submit">
+                Delete school group
+            </button>
+        }
+
+        <div class="clearfix"></div>
     </div>
 </div>
 
 <br />
-@foreach (var message in ViewBag.Group.Messages)
+@foreach (var message in Model.Messages)
 {
     <div class="container">
         <div class="row">
@@ -60,7 +63,7 @@
             <div class="panel">
                 <form method="post" action="/Messages/New">
                     <div class="panel-body">
-                        <input type="hidden" name="GroupId" value="@ViewBag.Group.Id" />
+                        <input type="hidden" name="GroupId" value="@Model.Id" />
                         <label>Message content</label>
                         <br />
                         <textarea class="form-control" name="Content"></textarea>
