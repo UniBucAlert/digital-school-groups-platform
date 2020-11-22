@@ -1,0 +1,12 @@
+﻿<div class="panel-heading">@Model.Title</div>
+<div class="panel-body">
+    Group description: <strong>@Model.Description</strong>
+    <br />
+    <span class="label label-success">since: @Model.DateCreated</span>
+    <br />
+    <i class="glyphicon glyphicon-globe"></i> @Model.Category.CategoryName
+
+    <i class="glyphicon glyphicon-user"></i> <i>Group created by</i>
+    <strong> @Model.User.UserName </strong>
+
+</div>

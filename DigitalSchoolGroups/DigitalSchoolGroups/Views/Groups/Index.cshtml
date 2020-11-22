@@ -1,0 +1,21 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>School Groups</h2>
+
+<h1>@ViewBag.Message</h1>
+
+@foreach (DigitalSchoolGroupsPlatform.Models.Group group in ViewBag.Groups)
+{
+    <div class="panel panel-default">
+        
+        @Html.Partial("GroupInfo", group)
+
+        <div class="panel panel-footer">
+            <a class="btn btn-success btn-sm" href="/Groups/Show/@group.Id">Show group</a>
+            @*<a class="btn btn-success btn-sm" href="/Groups/Edit/@group.Id">Edit group</a>*@
+        </div>
+    </div>
+}
