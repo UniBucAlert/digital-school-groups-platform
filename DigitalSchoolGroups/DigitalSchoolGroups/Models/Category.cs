@@ -10,7 +10,8 @@ namespace DigitalSchoolGroupsPlatform.Models
     {
         [Key]
         public int CategoryId { get; set; }
-        [Required]
+
+        [Required(ErrorMessage = "Category name is mandatory!")]
         public string CategoryName { get; set; }
 
         // Foreign Key Relationship: One (category) - Many (groups)

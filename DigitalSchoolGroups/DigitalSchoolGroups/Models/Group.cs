@@ -22,6 +22,7 @@ namespace DigitalSchoolGroupsPlatform.Models
         [Required(ErrorMessage = "Group description is mandatory!")]
         [DataType(DataType.MultilineText)]
         public string Description { get; set; }
+
         public DateTime DateCreated { get; set; }
 
         // Foreign Key "CategoryId", mapped to Category Model 
@@ -35,6 +36,8 @@ namespace DigitalSchoolGroupsPlatform.Models
 
         // Foreign Key Relationship: One (category) - Many (groups)
         public virtual Category Category { get; set; }
+
+        // Foreign Key Relationship: One (group) - Many (messages)
         public virtual ICollection<Message> Messages { get; set; }
 
         // Declare Categ array for the categories list.

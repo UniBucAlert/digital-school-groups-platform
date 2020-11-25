@@ -27,6 +27,7 @@ namespace DigitalSchoolGroupsPlatform.Controllers
             return Redirect("/Groups/Show/" + message.GroupId);
         }
 
+        /*
         [HttpPost]
         public ActionResult New(Message message)
         {
@@ -44,7 +45,8 @@ namespace DigitalSchoolGroupsPlatform.Controllers
             }
 
         }
-
+        */
+        
         public ActionResult Edit(int id)
         {
             Message message = db.Messages.Find(id);

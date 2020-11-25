@@ -16,6 +16,11 @@ namespace DigitalSchoolGroupsPlatform.Controllers
         // ----------READ----------
         public ActionResult Index()
         {
+            if (TempData.ContainsKey("message"))
+            {
+                ViewBag.message = TempData["message"].ToString();
+            }
+
             // Order categories in alphabetical order.
             var categories = from category in db.Categories
                              orderby category.CategoryName
@@ -29,7 +34,7 @@ namespace DigitalSchoolGroupsPlatform.Controllers
         {
             Category category = db.Categories.Find(id);
             ViewBag.Category = category;
-            return View();
+            return View();  // de modificat....
         }
 
         // ----------CREATE----------
@@ -43,9 +48,17 @@ namespace DigitalSchoolGroupsPlatform.Controllers
         {
             try
             {
-                db.Categories.Add(category);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    db.Categories.Add(category);
+                    db.SaveChanges();
+                    TempData["message"] = "Category successfully added!";
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    return View();  //(category)
+                }
             }
             catch (Exception e)
             {
@@ -70,6 +83,7 @@ namespace DigitalSchoolGroupsPlatform.Controllers
                 if (TryUpdateModel(category))
                 {
                     category.CategoryName = requestCategory.CategoryName;
+                    TempData["message"] = "Categoria a fost modificata!";
                     db.SaveChanges();
                 }
 
@@ -88,6 +102,7 @@ namespace DigitalSchoolGroupsPlatform.Controllers
             Category category = db.Categories.Find(id);
             db.Categories.Remove(category);
             db.SaveChanges();
+            TempData["message"] = "Categoria a fost stearsa!";
             return RedirectToAction("Index");
         }
     }

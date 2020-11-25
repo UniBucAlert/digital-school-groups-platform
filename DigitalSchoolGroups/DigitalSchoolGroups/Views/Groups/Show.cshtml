@@ -1,31 +1,32 @@
 ﻿@model DigitalSchoolGroupsPlatform.Models.Group
-@*
-    @{
-        ViewBag.Title = "Show";
-    }
-*@
+
 <br />
 <a href="/Groups/Index">Back to groups main page</a>
 <br /><br />
 <div class="panel panel-default">
     @Html.Partial("GroupInfo", Model)
-    <div class="panel-footer">
-        <a class="btn btn-success pull-left" href="/Groups/Edit/@Model.Id">
-            Modify school group
-        </a>
 
-        @using (Html.BeginForm(actionName: "Delete", controllerName: "Groups",
-            method: FormMethod.Post, routeValues: new { id = Model.Id }))
-        {
-            @Html.HttpMethodOverride(HttpVerbs.Delete)
+    @if(Model.UserId == ViewBag.utilizatorCurent && ViewBag.afisareButoane || ViewBag.esteAdmin)
+    {
+        <div class="panel-footer">
+            <a class="btn btn-success pull-left" href="/Groups/Edit/@Model.Id">
+                Modify school group
+            </a>
+
+            @using (Html.BeginForm(actionName: "Delete", controllerName: "Groups",
+                method: FormMethod.Post, routeValues: new { id = Model.Id }))
+            {
+                @Html.HttpMethodOverride(HttpVerbs.Delete)
             
-            <button class="btn btn-danger pull-right" type="submit">
-                Delete school group
-            </button>
-        }
+                <button class="btn btn-danger pull-right" type="submit">
+                    Delete school group
+                </button>
+            }
 
-        <div class="clearfix"></div>
-    </div>
+            <div class="clearfix"></div>
+        </div>
+    }
+
 </div>
 
 <br />
@@ -38,16 +39,23 @@
                 <div>
                     <p>@message.Content</p>
                     <small class="pull-right">@message.Date</small>
+                    <i class="glyphicon glyphicon-user"></i> <i>message written by</i>
+                    <strong> @message.User.UserName </strong>
                 </div>
-                <div style="display: inline-block; float : left; margin-right: 15px">
-                    <a class="glyphicon glyphicon-pencil" href="/Messages/Edit/@message.MessageId"></a>
-                </div>
-                <div style="display: inline-block; float : left">
-                    <form method="post" action="/Messages/Delete/@message.MessageId">
-                        @Html.HttpMethodOverride(HttpVerbs.Delete)
-                        <button class="glyphicon glyphicon-trash" style="border: none; background: transparent" type="submit"></button>
-                    </form>
-                </div>
+
+                @if(message.UserId == ViewBag.utilizatorCurent || ViewBag.esteAdmin)
+                {
+                    <div style="display: inline-block; float : left; margin-right: 15px">
+                        <a class="glyphicon glyphicon-pencil" href="/Messages/Edit/@message.MessageId"></a>
+                    </div>
+                    <div style="display: inline-block; float : left">
+                        <form method="post" action="/Messages/Delete/@message.MessageId">
+                            @Html.HttpMethodOverride(HttpVerbs.Delete)
+                            <button class="glyphicon glyphicon-trash" style="border: none; background: transparent" type="submit"></button>
+                        </form>
+                    </div>
+                }
+
             </div>
         </div>
         <div class="col-md-2"></div>
@@ -61,12 +69,13 @@
         </div>
         <div class="col-md-8">
             <div class="panel">
-                <form method="post" action="/Messages/New">
+                <form method="post" action="/Groups/Show/@Model.Id">
                     <div class="panel-body">
                         <input type="hidden" name="GroupId" value="@Model.Id" />
                         <label>Message content</label>
                         <br />
                         <textarea class="form-control" name="Content"></textarea>
+                        @*  @Html.ValidationMessage("Content", "", new { @class = "text-danger" })*@
                         <br />
                         <button class="btn btn-success " type="submit">Send message</button>
                     </div>

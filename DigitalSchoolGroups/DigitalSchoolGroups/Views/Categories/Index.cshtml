@@ -3,6 +3,11 @@
     ViewBag.Title = "Index";
 }
 
+@if (TempData.ContainsKey("message"))
+{
+    <h1>@ViewBag.message</h1>
+}
+
 <h2>School Groups Categories</h2>
 
 @foreach (var category in ViewBag.Categories)

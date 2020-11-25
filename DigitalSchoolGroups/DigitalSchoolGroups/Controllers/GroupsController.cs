@@ -33,6 +33,8 @@ namespace DigitalSchoolGroupsPlatform.Controllers
         public ActionResult New()
         {
             Group group = new Group();
+
+            // Preluam lista de categorii.
             group.Categ = GetAllCategories();
 
             // Preluam ID-ul utilizatorului curent.
@@ -70,6 +72,7 @@ namespace DigitalSchoolGroupsPlatform.Controllers
             }
             catch (Exception e)
             {
+                group.Categ = GetAllCategories();   // e nevoie??????
                 return View(group);
                 // Obs: nu returnam View() pt a nu mai punee utilizatorul sa scrie 
                 // inca o data ceea ce a scris inainte.
@@ -82,10 +85,47 @@ namespace DigitalSchoolGroupsPlatform.Controllers
         public ActionResult Show(int id)
         {
             Group group = db.Groups.Find(id);
-            ViewBag.Group = group;
+
+            ViewBag.Group = group;      // ???????????????????
             ViewBag.Category = group.Category;
 
+            // Setez drepturile de acces.
+            SetAccessRights();
+
             return View(group);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "User,Editor,Admin")]
+        public ActionResult Show(Message message)
+        {
+            message.Date = DateTime.Now;
+            message.UserId = User.Identity.GetUserId();
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    db.Messages.Add(message);
+                    db.SaveChanges();
+                    return Redirect("/Groups/Show/" + message.GroupId);
+                }
+                else
+                {
+                    Group a = db.Groups.Find(message.GroupId);
+
+                    SetAccessRights();
+
+                    return View(a);
+                }
+            }
+            catch (Exception e)
+            {
+                Group a = db.Groups.Find(message.GroupId);
+
+                SetAccessRights();
+
+                return View(a);
+            }
         }
 
         // ----------UPDATE----------
@@ -94,7 +134,19 @@ namespace DigitalSchoolGroupsPlatform.Controllers
         {
             Group group = db.Groups.Find(id);
             group.Categ = GetAllCategories();
-            return View(group);
+
+            // Un grup poate fi editat doar de utilizatorul care l-a creat
+            // sau de admin.
+            if (group.UserId == User.Identity.GetUserId() || User.IsInRole("Admin"))
+            {
+                return View(group);
+            }
+            else
+            {
+                TempData["message"] = "Nu aveti dreptul sa modificati grupul!";
+                return RedirectToAction("Index");
+            }
+            
         }
 
         [HttpPut]
@@ -107,23 +159,28 @@ namespace DigitalSchoolGroupsPlatform.Controllers
                 if (ModelState.IsValid)
                 {
                     Group group = db.Groups.Find(id);
-                    if (TryUpdateModel(group))
+
+                    if (group.UserId == User.Identity.GetUserId() || User.IsInRole("Admin"))
                     {
-                        group = requestGroup;
-                        db.SaveChanges();
-                        TempData["message"] = "The group has been successfully modified.";
+                        if (TryUpdateModel(group))
+                        {
+                            group = requestGroup;
+                            db.SaveChanges();
+                            TempData["message"] = "The group has been successfully modified.";
+                        }
                         return RedirectToAction("Index");
+
                     }
                     else
                     {
-                        return View(requestGroup);
+                        TempData["message"] = "Nu aveti dreptul sa modificati grupul!";
+                        return RedirectToAction("Index");
                     }
                 }
                 else
                 {
                     return View(requestGroup);
                 }
-
             }
             catch (Exception e)
             {
@@ -137,9 +194,18 @@ namespace DigitalSchoolGroupsPlatform.Controllers
         public ActionResult Delete(int id)
         {
             Group group = db.Groups.Find(id);
-            db.Groups.Remove(group);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+
+            if (group.UserId == User.Identity.GetUserId() || User.IsInRole("Admin"))
+            {
+                db.Groups.Remove(group);
+                db.SaveChanges();
+                TempData["message"] = "The group has been deleted.";
+                return RedirectToAction("Index");
+            } else
+            {
+                TempData["message"] = "You cannot delete the group.";
+                return RedirectToAction("Index");
+            }    
         }
 
         // --------------------------
@@ -176,6 +242,19 @@ namespace DigitalSchoolGroupsPlatform.Controllers
 
             // Return the categories list.
             return selectList;
+        }
+
+        private void SetAccessRights()
+        {
+            ViewBag.afisareButoane = false;
+
+            if (User.IsInRole("Editor") || User.IsInRole("Admin"))
+            {
+                ViewBag.afisareButoane = true;
+            }
+
+            ViewBag.esteAdmin = User.IsInRole("Admin");
+            ViewBag.utilizatorCurent = User.Identity.GetUserId();
         }
     }
 }
