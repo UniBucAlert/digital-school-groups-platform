@@ -86,9 +86,6 @@ namespace DigitalSchoolGroupsPlatform.Controllers
         {
             Group group = db.Groups.Find(id);
 
-            ViewBag.Group = group;      // ???????????????????
-            ViewBag.Category = group.Category;
-
             // Setez drepturile de acces.
             SetAccessRights();
 
@@ -246,15 +243,15 @@ namespace DigitalSchoolGroupsPlatform.Controllers
 
         private void SetAccessRights()
         {
-            ViewBag.afisareButoane = false;
+            ViewBag.showButtons = false;
 
             if (User.IsInRole("Editor") || User.IsInRole("Admin"))
             {
-                ViewBag.afisareButoane = true;
+                ViewBag.showButtons = true;
             }
 
-            ViewBag.esteAdmin = User.IsInRole("Admin");
-            ViewBag.utilizatorCurent = User.Identity.GetUserId();
+            ViewBag.isAdmin = User.IsInRole("Admin");
+            ViewBag.currentUser = User.Identity.GetUserId();
         }
     }
 }

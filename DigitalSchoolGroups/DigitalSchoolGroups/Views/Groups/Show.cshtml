@@ -6,7 +6,7 @@
 <div class="panel panel-default">
     @Html.Partial("GroupInfo", Model)
 
-    @if(Model.UserId == ViewBag.utilizatorCurent && ViewBag.afisareButoane || ViewBag.esteAdmin)
+    @if(Model.UserId == ViewBag.currentUser && ViewBag.showButtons || ViewBag.isAdmin)
     {
         <div class="panel-footer">
             <a class="btn btn-success pull-left" href="/Groups/Edit/@Model.Id">
@@ -43,7 +43,7 @@
                     <strong> @message.User.UserName </strong>
                 </div>
 
-                @if(message.UserId == ViewBag.utilizatorCurent || ViewBag.esteAdmin)
+                @if(message.UserId == ViewBag.currentUser || ViewBag.isAdmin)
                 {
                     <div style="display: inline-block; float : left; margin-right: 15px">
                         <a class="glyphicon glyphicon-pencil" href="/Messages/Edit/@message.MessageId"></a>
@@ -75,7 +75,7 @@
                         <label>Message content</label>
                         <br />
                         <textarea class="form-control" name="Content"></textarea>
-                        @*  @Html.ValidationMessage("Content", "", new { @class = "text-danger" })*@
+                        @Html.ValidationMessage("Content", "", new { @class = "text-danger" })
                         <br />
                         <button class="btn btn-success " type="submit">Send message</button>
                     </div>
