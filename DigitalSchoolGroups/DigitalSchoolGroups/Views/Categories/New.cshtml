@@ -1,15 +1,13 @@
 ﻿
-@{
-    ViewBag.Title = "New";
-}
-
 <h2>New category</h2>
 
 <form method="post" action="/Categories/New">
-    <label>Category name</label>
+    @Html.Label("CategoryName", "Category name")
     <br />
-    <input type="text" name="CategoryName" />
-    <br />
+
+    @Html.TextBox("CategoryName", null, new { @class = "form-control" })
+    @Html.ValidationMessage("CategoryName", null, new { @class = "text-danger" })
+    <br /><br />
 
     <button class="btn btn-success" type="submit">Add category</button>
 </form>

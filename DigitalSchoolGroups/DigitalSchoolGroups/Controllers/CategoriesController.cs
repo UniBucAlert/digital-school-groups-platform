@@ -33,8 +33,7 @@ namespace DigitalSchoolGroupsPlatform.Controllers
         public ActionResult Show(int id)
         {
             Category category = db.Categories.Find(id);
-            ViewBag.Category = category;
-            return View();  // de modificat....
+            return View(category);
         }
 
         // ----------CREATE----------
@@ -57,12 +56,12 @@ namespace DigitalSchoolGroupsPlatform.Controllers
                 }
                 else
                 {
-                    return View();  //(category)
+                    return View(category);
                 }
             }
             catch (Exception e)
             {
-                return View();
+                return View(category);
             }
         }
 
@@ -70,8 +69,7 @@ namespace DigitalSchoolGroupsPlatform.Controllers
         public ActionResult Edit(int id)
         {
             Category category = db.Categories.Find(id);
-            ViewBag.Category = category;
-            return View();
+            return View(category);
         }
 
         [HttpPut]
@@ -80,18 +78,20 @@ namespace DigitalSchoolGroupsPlatform.Controllers
             try
             {
                 Category category = db.Categories.Find(id);
+
                 if (TryUpdateModel(category))
                 {
                     category.CategoryName = requestCategory.CategoryName;
-                    TempData["message"] = "Categoria a fost modificata!";
                     db.SaveChanges();
+                    TempData["message"] = "Category successfully modified!";
+                    return RedirectToAction("Index");
                 }
 
-                return RedirectToAction("Index");
+                return View(requestCategory);
             }
             catch (Exception e)
             {
-                return View();
+                return View(requestCategory);
             }
         }
 
@@ -102,7 +102,7 @@ namespace DigitalSchoolGroupsPlatform.Controllers
             Category category = db.Categories.Find(id);
             db.Categories.Remove(category);
             db.SaveChanges();
-            TempData["message"] = "Categoria a fost stearsa!";
+            TempData["message"] = "Category successfully deleted!";
             return RedirectToAction("Index");
         }
     }

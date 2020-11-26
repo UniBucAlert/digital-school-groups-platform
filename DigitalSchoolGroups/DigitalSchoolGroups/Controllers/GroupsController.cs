@@ -72,9 +72,9 @@ namespace DigitalSchoolGroupsPlatform.Controllers
             }
             catch (Exception e)
             {
-                group.Categ = GetAllCategories();   // e nevoie??????
+                group.Categ = GetAllCategories();
                 return View(group);
-                // Obs: nu returnam View() pt a nu mai punee utilizatorul sa scrie 
+                // Obs: nu returnam View() pt a nu mai pune utilizatorul sa scrie 
                 // inca o data ceea ce a scris inainte.
                 // Starea obiectului este pastrata!
             }
@@ -108,20 +108,20 @@ namespace DigitalSchoolGroupsPlatform.Controllers
                 }
                 else
                 {
-                    Group a = db.Groups.Find(message.GroupId);
+                    Group group = db.Groups.Find(message.GroupId);
 
                     SetAccessRights();
 
-                    return View(a);
+                    return View(group);
                 }
             }
             catch (Exception e)
             {
-                Group a = db.Groups.Find(message.GroupId);
+                Group group = db.Groups.Find(message.GroupId);
 
                 SetAccessRights();
 
-                return View(a);
+                return View(group);
             }
         }
 
@@ -140,7 +140,7 @@ namespace DigitalSchoolGroupsPlatform.Controllers
             }
             else
             {
-                TempData["message"] = "Nu aveti dreptul sa modificati grupul!";
+                TempData["message"] = "You do not have the rights to modify the group!";
                 return RedirectToAction("Index");
             }
             
@@ -150,7 +150,6 @@ namespace DigitalSchoolGroupsPlatform.Controllers
         [Authorize(Roles = "Editor,Admin")]
         public ActionResult Edit(int id, Group requestGroup)
         {
-            requestGroup.Categ = GetAllCategories();
             try
             {
                 if (ModelState.IsValid)
@@ -166,21 +165,22 @@ namespace DigitalSchoolGroupsPlatform.Controllers
                             TempData["message"] = "The group has been successfully modified.";
                         }
                         return RedirectToAction("Index");
-
                     }
                     else
                     {
-                        TempData["message"] = "Nu aveti dreptul sa modificati grupul!";
+                        TempData["message"] = "You do not have the rights to modify the group!";
                         return RedirectToAction("Index");
                     }
                 }
                 else
                 {
+                    requestGroup.Categ = GetAllCategories();
                     return View(requestGroup);
                 }
             }
             catch (Exception e)
             {
+                requestGroup.Categ = GetAllCategories();
                 return View(requestGroup);
             }
         }
@@ -200,7 +200,7 @@ namespace DigitalSchoolGroupsPlatform.Controllers
                 return RedirectToAction("Index");
             } else
             {
-                TempData["message"] = "You cannot delete the group.";
+                TempData["message"] = "You do not have the rights to delete the group.";
                 return RedirectToAction("Index");
             }    
         }

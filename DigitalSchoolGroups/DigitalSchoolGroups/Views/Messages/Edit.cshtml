@@ -1,14 +1,15 @@
-﻿
-@{
-    ViewBag.Title = "Edit";
-}
+﻿@model DigitalSchoolGroupsPlatform.Models.Message
 
 <h2>Edit message</h2>
-<form method="post" action="/Messages/Edit/@ViewBag.Message.MessageId">
+<form method="post" action="/Messages/Edit/@Model.MessageId">
     @Html.HttpMethodOverride(HttpVerbs.Put)
+
     <label>Content</label>
     <br />
-    <textarea name="Content">@ViewBag.Message.Content</textarea>
+
+    <textarea name="Content">@Model.Content</textarea>
+    @Html.ValidationMessage("Content", null, new { @class = "text-danger" })
     <br />
+
     <button class="btn btn-success" type="submit">Submit changes</button>
 </form>
