@@ -8,7 +8,7 @@
 - membrii unui grup pot adauga **mesaje** si pot adauga noi **activitati** in calendarul grupului. De asemenea, pot sterge si edita propriile mesaje. (1.5p aproape :heavy_check_mark: - mesaje da, activitati nu)
 - membrii unui grup pot fi vizualizati intr-o lista separata. (0.5p)
 - un utilizator inregistrat poate sa faca parte din mai multe grupuri. Astfel utilizatorul are la dispozitie o lista cu grupurile din care face parte. (1.0p)
-- administratorul se ocupa de buna functionare a platformei. Acesta poate sterge grupurile care au continut neadecvat, mesaje, etc. sau poate revoca sau activa drepturile utilizatorilor si editorilor. (1.0p - partially done). 
+- administratorul se ocupa de buna functionare a platformei. Acesta poate sterge grupurile care au continut neadecvat, mesaje, etc. sau poate revoca sau activa drepturile utilizatorilor si editorilor. (1.0p :heavy_check_mark:). 
 
 ## Observatii
 - Proiectele trebuie realizate in **ASP.NET MVC 5**.
