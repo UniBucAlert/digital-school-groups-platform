@@ -1,6 +1,8 @@
-﻿using System.Data.Entity;
+﻿using System.Collections.Generic;
+using System.Data.Entity;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Web.Mvc;
 using DigitalSchoolGroupsPlatform.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
@@ -10,6 +12,8 @@ namespace DigitalSchoolGroups.Models
     // You can add profile data for the user by adding more properties to your ApplicationUser class, please visit https://go.microsoft.com/fwlink/?LinkID=317594 to learn more.
     public class ApplicationUser : IdentityUser
     {
+        public IEnumerable<SelectListItem> AllRoles { get; set; }
+
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
@@ -18,24 +22,11 @@ namespace DigitalSchoolGroups.Models
             return userIdentity;
         }
     }
-    /*
+
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
-        {
-        }
-
-        public static ApplicationDbContext Create()
-        {
-            return new ApplicationDbContext();
-        }
-    }
-    */
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
-    {
-        public ApplicationDbContext()
-        : base("DefaultConnection", throwIfV1Schema: false)
         {
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<ApplicationDbContext,
                 DigitalSchoolGroups.Migrations.Configuration>("DefaultConnection"));
@@ -46,8 +37,8 @@ namespace DigitalSchoolGroups.Models
         public DbSet<Message> Messages { get; set; }
 
         public static ApplicationDbContext Create()
-            {
-                return new ApplicationDbContext();
-            }
-        }
+        {
+            return new ApplicationDbContext();
+        }
+    }
 }

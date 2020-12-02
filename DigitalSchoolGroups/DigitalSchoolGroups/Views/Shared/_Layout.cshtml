@@ -26,6 +26,7 @@
                     {
                         <li>@Html.ActionLink("Show categories", "Index", "Categories")</li>
                         <li>@Html.ActionLink("Add category", "New", "Categories")</li>
+                        <li>@Html.ActionLink("Show users", "Index", "Users")</li>
                     }
 
                     @if (User.IsInRole("Editor") || User.IsInRole("Admin"))
