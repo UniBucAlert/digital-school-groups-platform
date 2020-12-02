@@ -55,9 +55,9 @@ namespace DigitalSchoolGroups
             //   consumerKey: "",
             //   consumerSecret: "");
 
-            //app.UseFacebookAuthentication(
-            //   appId: "",
-            //   appSecret: "");
+            app.UseFacebookAuthentication(
+               appId: "219941219527416",
+               appSecret: "a4e54d4009b57bbd8013089ab3aacb4c");
 
             //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
             //{
