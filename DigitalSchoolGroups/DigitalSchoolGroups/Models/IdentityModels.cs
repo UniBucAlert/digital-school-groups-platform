@@ -6,6 +6,8 @@ using System.Web.Mvc;
 using DigitalSchoolGroupsPlatform.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace DigitalSchoolGroups.Models
 {
@@ -21,10 +23,47 @@ namespace DigitalSchoolGroups.Models
             // Add custom user claims here
             return userIdentity;
         }
+
+        [InverseProperty("Users")]
+        public virtual ICollection<Group> Groups { get; set; }
+
+        [InverseProperty("Requests")]
+        public virtual ICollection<Group> GroupsRequests { get; set; }
+
+      //  public virtual ICollection<Group> AdminOf { get; set; }
+
+        public bool IsInGroup(Group group)
+        {
+            if (group.GroupAdmin.Id == Id)
+                return true;
+            foreach (DigitalSchoolGroupsPlatform.Models.Group gr in Groups)
+            {
+                if (gr.Id == group.Id)
+                    return true;
+            }
+            return false;
+        }
+
+        public bool RequestedToJoin(Group group)
+        {
+            foreach (DigitalSchoolGroupsPlatform.Models.Group gr in GroupsRequests)
+            {
+                if (gr.Id == group.Id)
+                    return true;
+            }
+            return false;
+        }
+
+        public void DeleteJoinRequest(Group group)
+        {
+            group.Requests.Remove(this);
+            GroupsRequests.Remove(group);
+        }
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
+
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {
@@ -32,6 +71,7 @@ namespace DigitalSchoolGroups.Models
                 DigitalSchoolGroups.Migrations.Configuration>("DefaultConnection"));
 
         }
+
         public DbSet<Group> Groups { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Message> Messages { get; set; }
@@ -39,6 +79,11 @@ namespace DigitalSchoolGroups.Models
         public static ApplicationDbContext Create()
         {
             return new ApplicationDbContext();
+        }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

@@ -2,11 +2,12 @@
 
 <br />
 <a href="/Groups/Index">Back to groups main page</a>
-<br /><br />
+<br />
+<br />
 <div class="panel panel-default">
     @Html.Partial("GroupInfo", Model)
 
-    @if(Model.UserId == ViewBag.currentUser && ViewBag.showButtons || ViewBag.isAdmin)
+    @if (Model.GroupAdmin.Id == ViewBag.currentUser && ViewBag.showButtons || ViewBag.isAdmin)
     {
         <div class="panel-footer">
             <a class="btn btn-success pull-left" href="/Groups/Edit/@Model.Id">
@@ -17,7 +18,7 @@
                 method: FormMethod.Post, routeValues: new { id = Model.Id }))
             {
                 @Html.HttpMethodOverride(HttpVerbs.Delete)
-            
+
                 <button class="btn btn-danger pull-right" type="submit">
                     Delete school group
                 </button>
@@ -29,12 +30,40 @@
 
 </div>
 
+@if (Model.Requests != null)
+{
+    foreach (var user in Model.Requests)
+    {
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <div>
+                        <p>@user.UserName</p>
+                        <form method="post" action="/Groups/JoinRequest">
+                            @Html.HttpMethodOverride(HttpVerbs.Delete)
+                            <input type="hidden" name="groupId" value="@Model.Id" />
+                            <input type="hidden" name="userId" value="@user.Id" />
+                            <button class="btn btn-danger" type="submit">Decline</button>
+                        </form>
+
+                        <form method="post" action="/Groups/JoinRequest">
+                            <input type="hidden" name="groupId" value="@Model.Id" />
+                            <input type="hidden" name="userId" value="@user.Id" />
+                            <button class="btn btn-success" type="submit">Accept</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+    }
+}
+
 <br />
 @foreach (var message in Model.Messages)
 {
     <div class="container">
         <div class="row">
-            <div class="col-md-2"></div>
             <div class="col-md-8">
                 <div>
                     <p>@message.Content</p>
@@ -43,7 +72,7 @@
                     <strong> @message.User.UserName </strong>
                 </div>
 
-                @if(message.UserId == ViewBag.currentUser || ViewBag.isAdmin)
+                @if (message.UserId == ViewBag.currentUser || ViewBag.isAdmin)
                 {
                     <div style="display: inline-block; float : left; margin-right: 15px">
                         <a class="glyphicon glyphicon-pencil" href="/Messages/Edit/@message.MessageId"></a>
@@ -58,7 +87,6 @@
 
             </div>
         </div>
-        <div class="col-md-2"></div>
     </div>
     <hr />
 }

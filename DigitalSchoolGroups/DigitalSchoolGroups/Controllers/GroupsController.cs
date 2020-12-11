@@ -1,6 +1,7 @@
 ﻿using DigitalSchoolGroups.Models;
 using DigitalSchoolGroupsPlatform.Models;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,13 +12,15 @@ namespace DigitalSchoolGroupsPlatform.Controllers
 {
     public class GroupsController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private static ApplicationDbContext db = new ApplicationDbContext();
+        private static UserManager<ApplicationUser> userManager = new UserManager<ApplicationUser>(new
+            UserStore<ApplicationUser>(db));
 
         // ----------READ----------
         [Authorize(Roles = "User,Editor,Admin")]
         public ActionResult Index()
         {
-            var groups = db.Groups.Include("Category").Include("User");
+            var groups = db.Groups.Include("Category").Include("GroupAdmin");
             ViewBag.Groups = groups;
 
             if (TempData.ContainsKey("message"))
@@ -25,7 +28,14 @@ namespace DigitalSchoolGroupsPlatform.Controllers
                 ViewBag.Message = TempData["message"];
             }
 
+            ViewBag.userObject = db.Users.Find(User.Identity.GetUserId());
+
             return View();
+        }
+
+        private ApplicationUser GetCurrentUser()
+        {
+            return db.Users.Find(User.Identity.GetUserId());
         }
 
         // ----------CREATE----------
@@ -38,7 +48,7 @@ namespace DigitalSchoolGroupsPlatform.Controllers
             group.Categ = GetAllCategories();
 
             // Preluam ID-ul utilizatorului curent.
-            group.UserId = User.Identity.GetUserId();
+            group.GroupAdmin = GetCurrentUser();
 
             // Atentie: daca pasam View() => eroare - categoriile null!
             // Trebuie trimise ca argument si categoriile!
@@ -53,7 +63,7 @@ namespace DigitalSchoolGroupsPlatform.Controllers
         {
             // Set DateCreated as the current date.
             group.DateCreated = DateTime.Now;
-            group.UserId = User.Identity.GetUserId();
+            group.GroupAdmin = GetCurrentUser();
 
             try
             {
@@ -78,6 +88,38 @@ namespace DigitalSchoolGroupsPlatform.Controllers
                 // inca o data ceea ce a scris inainte.
                 // Starea obiectului este pastrata!
             }
+        }
+
+
+        // Accepts a join request
+        [HttpPost]
+        [Authorize(Roles = "User,Editor,Admin")]
+        public ActionResult JoinRequest(int groupId, String userId)
+        {
+            Group group = db.Groups.Find(groupId);
+            ApplicationUser user = db.Users.Find(userId);
+            user.DeleteJoinRequest(group);
+
+            user.Groups.Add(group);
+            group.Users.Add(user);
+
+            db.SaveChanges();
+
+            return RedirectToAction("Show/" + groupId);
+        }
+
+        // Declines a join request
+        [HttpDelete]
+        [ActionName("JoinRequest")]
+        [Authorize(Roles = "User,Editor,Admin")]
+        public ActionResult DeleteJoinRequest(int groupId, String userId)
+        {
+            Group group = db.Groups.Find(groupId);
+            ApplicationUser user = db.Users.Find(userId);
+            user.DeleteJoinRequest(group);
+            db.SaveChanges();
+
+            return RedirectToAction("Show/" + groupId);
         }
 
         // ----------READ ONE----------
@@ -125,6 +167,23 @@ namespace DigitalSchoolGroupsPlatform.Controllers
             }
         }
 
+        [HttpPost]
+        [Authorize(Roles = "User,Editor,Admin")]
+        public ActionResult Join(int id)
+        {
+            Group group = db.Groups.Find(id);
+            ApplicationUser user = db.Users.Find(User.Identity.GetUserId());
+
+            if (TryUpdateModel(group))
+            {
+                user.GroupsRequests.Add(group);
+                group.Requests.Add(user);
+                db.SaveChanges();
+            }
+
+            return RedirectToAction("Index");
+        }
+
         // ----------UPDATE----------
         [Authorize(Roles = "Editor,Admin")]
         public ActionResult Edit(int id)
@@ -134,7 +193,7 @@ namespace DigitalSchoolGroupsPlatform.Controllers
 
             // Un grup poate fi editat doar de utilizatorul care l-a creat
             // sau de admin.
-            if (group.UserId == User.Identity.GetUserId() || User.IsInRole("Admin"))
+            if (group.GroupAdmin.Id == User.Identity.GetUserId() || User.IsInRole("Admin"))
             {
                 return View(group);
             }
@@ -156,7 +215,7 @@ namespace DigitalSchoolGroupsPlatform.Controllers
                 {
                     Group group = db.Groups.Find(id);
 
-                    if (group.UserId == User.Identity.GetUserId() || User.IsInRole("Admin"))
+                    if (group.GroupAdmin.Id == User.Identity.GetUserId() || User.IsInRole("Admin"))
                     {
                         if (TryUpdateModel(group))
                         {
@@ -192,7 +251,7 @@ namespace DigitalSchoolGroupsPlatform.Controllers
         {
             Group group = db.Groups.Find(id);
 
-            if (group.UserId == User.Identity.GetUserId() || User.IsInRole("Admin"))
+            if (group.GroupAdmin.Id == User.Identity.GetUserId() || User.IsInRole("Admin"))
             {
                 db.Groups.Remove(group);
                 db.SaveChanges();

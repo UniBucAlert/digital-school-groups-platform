@@ -178,9 +178,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202011181107360_Initial.cs" />
-    <Compile Include="Migrations\202011181107360_Initial.Designer.cs">
-      <DependentUpon>202011181107360_Initial.cs</DependentUpon>
+    <Compile Include="Migrations\202012111009113_InitialUpdate-Database.cs" />
+    <Compile Include="Migrations\202012111009113_InitialUpdate-Database.Designer.cs">
+      <DependentUpon>202012111009113_InitialUpdate-Database.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -194,6 +194,10 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\GroupsDatabase.mdf" />
+    <Content Include="App_Data\GroupsDatabase_log.ldf">
+      <DependentUpon>GroupsDatabase.mdf</DependentUpon>
+    </Content>
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -264,7 +268,6 @@
     <Content Include="Views\Users\Show.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
     <Folder Include="Views\Activities\" />
   </ItemGroup>
   <ItemGroup>
@@ -281,8 +284,8 @@
     <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202011181107360_Initial.resx">
-      <DependentUpon>202011181107360_Initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202012111009113_InitialUpdate-Database.resx">
+      <DependentUpon>202012111009113_InitialUpdate-Database.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

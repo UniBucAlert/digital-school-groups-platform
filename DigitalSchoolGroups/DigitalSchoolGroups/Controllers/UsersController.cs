@@ -134,7 +134,7 @@ namespace DigitalSchoolGroups.Controllers
 
             var user = UserManager.Users.FirstOrDefault(u => u.Id == id);
 
-            var groups = db.Groups.Where(a => a.UserId == id);
+            var groups = db.Groups.Where(a => a.GroupAdmin.Id == id);
             foreach (var group in groups)
             {
                 db.Groups.Remove(group);

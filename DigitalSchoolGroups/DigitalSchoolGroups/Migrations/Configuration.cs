@@ -10,7 +10,8 @@ namespace DigitalSchoolGroups.Migrations
         public Configuration()
         {
             AutomaticMigrationsEnabled = true;
-            ContextKey = "DigitalSchoolGroups.Models.ApplicationDbContext";
+            AutomaticMigrationDataLossAllowed = true;
+            ContextKey = "DigitalSchoolGroups.ApplicationDbContext";
         }
 
         protected override void Seed(DigitalSchoolGroups.Models.ApplicationDbContext context)
