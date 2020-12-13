@@ -13,21 +13,37 @@ namespace DigitalSchoolGroupsPlatform.Controllers
     public class GroupsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
-        //private static UserManager<ApplicationUser> userManager = new UserManager<ApplicationUser>(new
-          //  UserStore<ApplicationUser>(db));
+
+        // Number of groups to show on one page.
+        private int _perPage = 3;
 
         // ----------READ----------
         [Authorize(Roles = "User,Editor,Admin")]
         public ActionResult Index()
         {
-            var groups = db.Groups.Include("Category").Include("GroupAdmin");
-            ViewBag.Groups = groups;
+            var groups = db.Groups.Include("Category").Include("GroupAdmin").OrderBy(a => a.DateCreated);
+            var totalItems = groups.Count();
+            var currentPage = Convert.ToInt32(Request.Params.Get("page"));
+
+            var offset = 0;
+
+            if (!currentPage.Equals(0))
+            {
+                offset = (currentPage - 1) * this._perPage;
+            }
+
+            var paginatedGroups = groups.Skip(offset).Take(this._perPage);
 
             if (TempData.ContainsKey("message"))
             {
-                ViewBag.Message = TempData["message"];
-            }
+                ViewBag.Message = TempData["message"].ToString();
+            } 
 
+            //ViewBag.perPage = this._perPage;
+            ViewBag.total = totalItems;
+            ViewBag.lastPage = Math.Ceiling((float)totalItems / (float)this._perPage);
+
+            ViewBag.Groups = paginatedGroups;
             ViewBag.userObject = db.Users.Find(User.Identity.GetUserId());
 
             return View();
