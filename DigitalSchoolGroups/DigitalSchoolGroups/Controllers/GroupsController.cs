@@ -12,9 +12,9 @@ namespace DigitalSchoolGroupsPlatform.Controllers
 {
     public class GroupsController : Controller
     {
-        private static ApplicationDbContext db = new ApplicationDbContext();
-        private static UserManager<ApplicationUser> userManager = new UserManager<ApplicationUser>(new
-            UserStore<ApplicationUser>(db));
+        private ApplicationDbContext db = new ApplicationDbContext();
+        //private static UserManager<ApplicationUser> userManager = new UserManager<ApplicationUser>(new
+          //  UserStore<ApplicationUser>(db));
 
         // ----------READ----------
         [Authorize(Roles = "User,Editor,Admin")]
