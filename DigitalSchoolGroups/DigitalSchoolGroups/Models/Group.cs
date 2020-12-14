@@ -39,6 +39,7 @@ namespace DigitalSchoolGroupsPlatform.Models
         // Foreign Key Relationship: One (group) - Many (messages)
         public virtual ICollection<Message> Messages { get; set; }
 
+        public virtual ICollection<ApplicationUser> Moderators { get; set; }
         public virtual ICollection<ApplicationUser> Users { get; set; }
         public virtual ICollection<ApplicationUser> Requests { get; set; }
 

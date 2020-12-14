@@ -16,11 +16,12 @@
             <div class="col-md-6 row-style">
                 @Html.Partial("GroupInfo", group)
                 <div class="panel panel-footer">
-                    @if (ViewBag.userObject.IsInGroup(group))
+                    @if (ViewBag.currentUserObject.IsInGroup(group))
                     {
                         <a class="btn btn-success btn-sm" href="/Groups/Show/@group.Id">Show group</a>
+                        <a class="btn btn-success btn-sm" href="/Groups/Members/@group.Id">Show members</a>
                     }
-                    else if (ViewBag.userObject.RequestedToJoin(group))
+                    else if (ViewBag.currentUserObject.RequestedToJoin(group))
                     {
                         <div>Request pending...</div>
                     }

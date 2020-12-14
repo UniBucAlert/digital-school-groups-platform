@@ -7,7 +7,7 @@
 <div class="panel panel-default">
     @Html.Partial("GroupInfo", Model)
 
-    @if (Model.GroupAdmin.Id == ViewBag.currentUser && ViewBag.showButtons || ViewBag.isAdmin)
+    @if (ViewBag.currentUserObject.IsModeratorOf(Model) && ViewBag.showButtons || ViewBag.isAdmin)
     {
         <div class="panel-footer">
             <a class="btn btn-success pull-left" href="/Groups/Edit/@Model.Id">
@@ -30,7 +30,7 @@
 
 </div>
 
-@if (Model.Requests != null)
+@if (ViewBag.currentUserObject.IsModeratorOf(Model) && Model.Requests != null)
 {
     foreach (var user in Model.Requests)
     {

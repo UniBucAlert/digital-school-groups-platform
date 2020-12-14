@@ -30,13 +30,28 @@ namespace DigitalSchoolGroups.Models
         [InverseProperty("Requests")]
         public virtual ICollection<Group> GroupsRequests { get; set; }
 
-      //  public virtual ICollection<Group> AdminOf { get; set; }
+        [InverseProperty("Moderators")]
+        public virtual ICollection<Group> ModeratorOf { get; set; }
 
         public bool IsInGroup(Group group)
         {
             if (group.GroupAdmin.Id == Id)
                 return true;
+            if (IsModeratorOf(group))
+                return true;
             foreach (DigitalSchoolGroupsPlatform.Models.Group gr in Groups)
+            {
+                if (gr.Id == group.Id)
+                    return true;
+            }
+            return false;
+        }
+
+        public bool IsModeratorOf(Group group)
+        {
+            if (group.GroupAdmin.Id == Id)
+                return true;
+            foreach (DigitalSchoolGroupsPlatform.Models.Group gr in ModeratorOf)
             {
                 if (gr.Id == group.Id)
                     return true;
