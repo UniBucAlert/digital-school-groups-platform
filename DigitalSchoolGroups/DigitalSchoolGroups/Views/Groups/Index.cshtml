@@ -7,26 +7,35 @@
     <h3 class="alert alert-info" role="alert">@ViewBag.Message</h3>
 }
 
-@foreach (DigitalSchoolGroupsPlatform.Models.Group group in ViewBag.Groups)
-{
-    @Html.Partial("GroupInfo", group);
-    <div class="panel panel-footer">
-        @if (ViewBag.userObject.IsInGroup(group))
+
+<div class="container">
+    <div class="row">
+        @foreach (DigitalSchoolGroupsPlatform.Models.Group group in ViewBag.Groups)
         {
-            <a class="btn btn-success btn-sm" href="/Groups/Show/@group.Id">Show group</a>
-        }
-        else if (ViewBag.userObject.RequestedToJoin(group))
-        {
-            <div>Request pending...</div>
-        }
-        else
-        {
-            <form method="post" action="/Groups/Join/@group.Id">
-                <button class="btn btn-danger btn-sm" type="submit">Join group</button>
-            </form>
+
+            <div class="col-md-6 row-style">
+                @Html.Partial("GroupInfo", group)
+                <div class="panel panel-footer">
+                    @if (ViewBag.userObject.IsInGroup(group))
+                    {
+                        <a class="btn btn-success btn-sm" href="/Groups/Show/@group.Id">Show group</a>
+                    }
+                    else if (ViewBag.userObject.RequestedToJoin(group))
+                    {
+                        <div>Request pending...</div>
+                    }
+                    else
+                    {
+                        <form method="post" action="/Groups/Join/@group.Id">
+                            <button class="btn btn-danger btn-sm" type="submit">Join group</button>
+                        </form>
+                    }
+                </div>
+            </div>
+
         }
     </div>
-}
+</div>
 
 <div>
     <nav aria-label="Page navigation">

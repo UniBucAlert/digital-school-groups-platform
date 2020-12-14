@@ -17,7 +17,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("DigitalSchoolGroups", "Index", "Groups", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("UniBucAlert", "Index", "Groups", new { area = "" }, new { @class = "navbar-brand font-logo" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
@@ -38,6 +38,7 @@
                     @if (User.IsInRole("User"))
                     {
                         <li>@Html.ActionLink("Show groups", "Index", "Groups")</li>
+                        <li>@Html.ActionLink("Add group", "New", "Groups")</li>
                     }
 
                 </ul>
@@ -49,7 +50,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            <p>&copy; @DateTime.Now.Year - <span class="font-logo">UniBucAlert</span></p>
         </footer>
     </div>
 
