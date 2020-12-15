@@ -16,6 +16,8 @@ namespace DigitalSchoolGroupsPlatform.Controllers
         // ----------READ----------
         public ActionResult Index(int id) // groupId
         {
+            ViewBag.GroupId = id;
+
             if (TempData.ContainsKey("message"))
             {
                 ViewBag.message = TempData["message"].ToString();
@@ -34,6 +36,8 @@ namespace DigitalSchoolGroupsPlatform.Controllers
         // ----------READ ONE----------
         public ActionResult Show(int id)
         {
+            ViewBag.isAdmin = User.IsInRole("Admin");
+            ViewBag.currentUser = User.Identity.GetUserId();
             Activity activity = db.Activities.Find(id);
             return View(activity);
         }
@@ -86,10 +90,11 @@ namespace DigitalSchoolGroupsPlatform.Controllers
                 {
                     if (TryUpdateModel(activity))
                     {
-                        activity = requestActivity;
+                        activity.Title = requestActivity.Title;
+                        activity.Description = requestActivity.Description;
                         db.SaveChanges();
                         TempData["message"] = "Activity successfully modified!";
-                        return RedirectToAction("Index");
+                        return RedirectToAction("Index/" + activity.GroupId);
                     }
 
                     return View(requestActivity);
@@ -109,7 +114,7 @@ namespace DigitalSchoolGroupsPlatform.Controllers
         // ----------CREATE----------
         public ActionResult New(int id) // groupId
         {
-            ViewBag.GroupID = id;
+            ViewBag.GroupId = id;
             return View();
         }
 
@@ -117,6 +122,7 @@ namespace DigitalSchoolGroupsPlatform.Controllers
         public ActionResult New(Activity activity)
         {
             activity.Date = DateTime.Now;
+            activity.UserId = User.Identity.GetUserId();
             try
             {
                 if (ModelState.IsValid)

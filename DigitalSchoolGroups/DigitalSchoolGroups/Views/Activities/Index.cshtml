@@ -1,0 +1,36 @@
+﻿
+<h2>Activities</h2>
+<hr />
+
+@if (TempData.ContainsKey("message"))
+{
+    <h3 class="alert alert-info" role="alert">@ViewBag.Message</h3>
+}
+
+<a class="btn btn-primary btn-sms" href="/Activities/New/@ViewBag.GroupId">Add new activity</a>
+<hr />
+<br />
+
+<div class="container">
+    <div class="row">
+        @foreach (var activity in ViewBag.Activities)
+        {
+            <div class="col-md-6 row-style">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">@activity.Title</h3>
+                    </div>
+                    <div class="panel-body">
+                        <p>@activity.Description</p>
+                        <small class="pull-right">@activity.Date</small>
+                        <i class="glyphicon glyphicon-user"></i> <i>Added by</i>
+                        <strong> @activity.User.UserName </strong>
+                    </div>
+                    <div class="panel-footer">
+                        <a class="btn btn-default btn-xs" href="/Activities/Show/@activity.ActivityId">Show activity</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

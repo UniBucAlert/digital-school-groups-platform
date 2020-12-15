@@ -1,0 +1,32 @@
+﻿@model DigitalSchoolGroupsPlatform.Models.Activity
+@{
+    ViewBag.Title = "Show activity";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <h3 class="panel-title">@Model.Title</h3>
+    </div>
+    <div class="panel-body">
+        <p>@Model.Description</p>
+        <small class="pull-right">@Model.Date</small>
+        <i class="glyphicon glyphicon-user"></i> <i>Added by</i>
+        <strong> @Model.User.UserName </strong>
+    </div>
+    <div class="panel-footer" style="min-height: 40px">
+        @if (Model.UserId == ViewBag.currentUser || ViewBag.isAdmin)
+        {
+            <div style="display: inline-block; float : left; margin-right: 15px">
+                <a class="glyphicon glyphicon-pencil" href="/Activities/Edit/@Model.ActivityId"></a>
+            </div>
+            <div style="display: inline-block; float : left">
+                <form method="post" action="/Activities/Delete/@Model.ActivityId">
+                    @Html.HttpMethodOverride(HttpVerbs.Delete)
+                    <button class="glyphicon glyphicon-trash" style="border: none; background: transparent" type="submit"></button>
+                </form>
+            </div>
+        }
+    </div>
+</div>
