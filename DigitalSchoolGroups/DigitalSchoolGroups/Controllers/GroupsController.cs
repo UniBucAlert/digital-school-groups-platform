@@ -44,7 +44,7 @@ namespace DigitalSchoolGroupsPlatform.Controllers
             ViewBag.lastPage = Math.Ceiling((float)totalItems / (float)this._perPage);
 
             ViewBag.Groups = paginatedGroups;
-            ViewBag.userObject = db.Users.Find(User.Identity.GetUserId());
+            ViewBag.currentUserObject = db.Users.Find(User.Identity.GetUserId());
 
             return View();
         }
@@ -138,6 +138,61 @@ namespace DigitalSchoolGroupsPlatform.Controllers
             return RedirectToAction("Show/" + groupId);
         }
 
+        [Authorize(Roles = "User,Editor,Admin")]
+        public ActionResult Members(int id)
+        {
+            Group group = db.Groups.Find(id);
+
+            // Setez drepturile de acces.
+            SetAccessRights();
+
+            return View(group);
+        }
+
+        [HttpDelete]
+        [ActionName("Members")]
+        [Authorize(Roles = "User,Editor,Admin")]
+        public ActionResult KickMember(int groupId, String userId)
+        {
+            Group group = db.Groups.Find(groupId);
+            ApplicationUser user = db.Users.Find(userId);
+
+            user.Groups.Remove(group);
+            group.Users.Remove(user);
+
+            db.SaveChanges();
+
+            return RedirectToAction("Members/" + groupId);
+        }
+
+        [HttpPut]
+        [ActionName("Members")]
+        [Authorize(Roles = "User,Editor,Admin")]
+        public ActionResult ChangeGroupRole(int groupId, String userId)
+        {
+            Group group = db.Groups.Find(groupId);
+            ApplicationUser user = db.Users.Find(userId);
+
+            if (user.IsModeratorOf(group))
+            {
+                user.Groups.Add(group);
+                group.Users.Add(user);
+                user.ModeratorOf.Remove(group);
+                group.Moderators.Remove(user);
+            }
+            else
+            {
+                user.Groups.Remove(group);
+                group.Users.Remove(user);
+                user.ModeratorOf.Add(group);
+                group.Moderators.Add(user);
+            }
+
+            db.SaveChanges();
+
+            return RedirectToAction("Members/" + groupId);
+        }
+
         // ----------READ ONE----------
         [Authorize(Roles = "User,Editor,Admin")]
         public ActionResult Show(int id)
@@ -207,9 +262,9 @@ namespace DigitalSchoolGroupsPlatform.Controllers
             Group group = db.Groups.Find(id);
             group.Categ = GetAllCategories();
 
-            // Un grup poate fi editat doar de utilizatorul care l-a creat
+            // Un grup poate fi editat doar de moderator
             // sau de admin.
-            if (group.GroupAdmin.Id == User.Identity.GetUserId() || User.IsInRole("Admin"))
+            if (GetCurrentUser().IsModeratorOf(group) || User.IsInRole("Admin"))
             {
                 return View(group);
             }
@@ -231,7 +286,7 @@ namespace DigitalSchoolGroupsPlatform.Controllers
                 {
                     Group group = db.Groups.Find(id);
 
-                    if (group.GroupAdmin.Id == User.Identity.GetUserId() || User.IsInRole("Admin"))
+                    if (GetCurrentUser().IsModeratorOf(group) || User.IsInRole("Admin"))
                     {
                         if (TryUpdateModel(group))
                         {
@@ -267,7 +322,7 @@ namespace DigitalSchoolGroupsPlatform.Controllers
         {
             Group group = db.Groups.Find(id);
 
-            if (group.GroupAdmin.Id == User.Identity.GetUserId() || User.IsInRole("Admin"))
+            if (GetCurrentUser().IsModeratorOf(group) || User.IsInRole("Admin"))
             {
                 db.Groups.Remove(group);
                 db.SaveChanges();
@@ -327,6 +382,7 @@ namespace DigitalSchoolGroupsPlatform.Controllers
 
             ViewBag.isAdmin = User.IsInRole("Admin");
             ViewBag.currentUser = User.Identity.GetUserId();
+            ViewBag.currentUserObject = GetCurrentUser();
         }
     }
 }
