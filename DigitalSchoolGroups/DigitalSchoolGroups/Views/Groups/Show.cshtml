@@ -56,40 +56,38 @@
 }
 <br />
 
-@if (Model.Messages != null)
+
+@foreach (var message in Model.Messages)
 {
-    foreach (var message in Model.Messages)
-    {
-        <div class="container">
-            <div class="row">
-                <div class="col-md-2">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-2">
+            </div>
+            <div class="col-md-8">
+                <div>
+                    <p>@message.Content</p>
+                    <small class="pull-right">@message.Date</small>
+                    <i class="glyphicon glyphicon-user"></i> <i>written by</i>
+                    <strong> @message.User.UserName </strong>
                 </div>
-                <div class="col-md-8">
-                    <div>
-                        <p>@message.Content</p>
-                        <small class="pull-right">@message.Date</small>
-                        <i class="glyphicon glyphicon-user"></i> <i>written by</i>
-                        <strong> @message.User.UserName </strong>
+
+                @if (message.UserId == ViewBag.currentUser || ViewBag.isAdmin)
+                {
+                    <div style="display: inline-block; float : left; margin-right: 15px">
+                        <a class="glyphicon glyphicon-pencil" href="/Messages/Edit/@message.MessageId"></a>
                     </div>
+                    <div style="display: inline-block; float : left">
+                        <form method="post" action="/Messages/Delete/@message.MessageId">
+                            @Html.HttpMethodOverride(HttpVerbs.Delete)
+                            <button class="glyphicon glyphicon-trash" style="border: none; background: transparent" type="submit"></button>
+                        </form>
+                    </div>
+                }
 
-                    @if (message.UserId == ViewBag.currentUser || ViewBag.isAdmin)
-                    {
-                        <div style="display: inline-block; float : left; margin-right: 15px">
-                            <a class="glyphicon glyphicon-pencil" href="/Messages/Edit/@message.MessageId"></a>
-                        </div>
-                        <div style="display: inline-block; float : left">
-                            <form method="post" action="/Messages/Delete/@message.MessageId">
-                                @Html.HttpMethodOverride(HttpVerbs.Delete)
-                                <button class="glyphicon glyphicon-trash" style="border: none; background: transparent" type="submit"></button>
-                            </form>
-                        </div>
-                    }
-
-                </div>
             </div>
         </div>
-        <hr />
-    }
+    </div>
+    <hr />
 }
 
 <div class="container">
@@ -114,3 +112,6 @@
         <div class="col-md-2"></div>
     </div>
 </div>
+
+<a class="btn btn-primary btn-sms pull-left" href="/Activities/Index/@Model.Id">See activities</a>
+<br /> 
