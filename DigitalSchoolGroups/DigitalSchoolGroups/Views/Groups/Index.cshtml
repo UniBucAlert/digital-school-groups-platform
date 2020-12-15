@@ -12,25 +12,28 @@
     <div class="row">
         @foreach (DigitalSchoolGroupsPlatform.Models.Group group in ViewBag.Groups)
         {
-
             <div class="col-md-6 row-style">
-                @Html.Partial("GroupInfo", group)
-                <div class="panel panel-footer">
-                    @if (ViewBag.currentUserObject.IsInGroup(group))
-                    {
-                        <a class="btn btn-success btn-sm" href="/Groups/Show/@group.Id">Show group</a>
-                        <a class="btn btn-success btn-sm" href="/Groups/Members/@group.Id">Show members</a>
-                    }
-                    else if (ViewBag.currentUserObject.RequestedToJoin(group))
-                    {
-                        <div>Request pending...</div>
-                    }
-                    else
-                    {
-                        <form method="post" action="/Groups/Join/@group.Id">
-                            <button class="btn btn-danger btn-sm" type="submit">Join group</button>
-                        </form>
-                    }
+                <div class="panel panel-primary">
+                    @Html.Partial("GroupInfo", group)
+                    <div class="panel-footer">
+                        @if (ViewBag.currentUserObject.IsInGroup(group))
+                        {
+                            <a class="btn btn-primary btn-sm" href="/Groups/Show/@group.Id">Show group</a>
+                            <a class="btn btn-primary btn-sm" href="/Groups/Members/@group.Id">Show members</a>
+                        }
+                        else if (ViewBag.currentUserObject.RequestedToJoin(group))
+                        {
+                            <div>Request pending...</div>
+                        }
+                        else
+                        {
+                            <form method="post" action="/Groups/Join/@group.Id">
+                                <button class="btn btn-default btn-sm" type="submit">
+                                    <i class="glyphicon glyphicon-plus"></i>&nbsp;Join
+                                </button>
+                            </form>
+                        }
+                    </div>
                 </div>
             </div>
 

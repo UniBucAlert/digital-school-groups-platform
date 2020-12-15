@@ -1,12 +1,16 @@
-﻿<div class="panel-heading">@Model.Title</div>
+﻿<div class="panel-heading">
+    <i class="glyphicon glyphicon-paperclip"></i>
+    @Model.Title
+</div>
 <div class="panel-body">
-    Group description: <strong>@Model.Description</strong>
+    <strong>@Model.Description</strong>
     <br />
-    <span class="label label-success">since: @Model.DateCreated</span>
+    <span class="label label-info pull-right">since: @Model.DateCreated</span>
     <br />
-    <i class="glyphicon glyphicon-globe"></i> @Model.Category.CategoryName
+    <i class="glyphicon glyphicon-folder-open"></i>
+    <strong>&nbsp;@Model.Category.CategoryName</strong>
 
-    <i class="glyphicon glyphicon-user"></i> <i>Group created by</i>
-    <strong> @Model.GroupAdmin.UserName </strong>
-
+    <span class="pull-right">
+        <i class="glyphicon glyphicon-user"></i><i>&nbsp;Created by </i><strong>@Model.GroupAdmin.UserName</strong>
+    </span>
 </div>
