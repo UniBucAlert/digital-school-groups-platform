@@ -7,13 +7,13 @@ namespace DigitalSchoolGroups.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class InitialUpdateDatabase : IMigrationMetadata
+    public sealed partial class Initial : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(InitialUpdateDatabase));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(Initial));
         
         string IMigrationMetadata.Id
         {
-            get { return "202012111009113_InitialUpdate-Database"; }
+            get { return "202012152011239_Initial"; }
         }
         
         string IMigrationMetadata.Source

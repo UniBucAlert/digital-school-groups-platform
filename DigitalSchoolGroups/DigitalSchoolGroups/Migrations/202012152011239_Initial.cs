@@ -3,18 +3,26 @@ namespace DigitalSchoolGroups.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class InitialUpdateDatabase : DbMigration
+    public partial class Initial : DbMigration
     {
         public override void Up()
         {
             CreateTable(
-                "dbo.Categories",
+                "dbo.Activities",
                 c => new
                     {
-                        CategoryId = c.Int(nullable: false, identity: true),
-                        CategoryName = c.String(nullable: false),
+                        ActivityId = c.Int(nullable: false, identity: true),
+                        Title = c.String(nullable: false),
+                        Description = c.String(),
+                        Date = c.DateTime(nullable: false),
+                        GroupId = c.Int(nullable: false),
+                        UserId = c.String(maxLength: 128),
                     })
-                .PrimaryKey(t => t.CategoryId);
+                .PrimaryKey(t => t.ActivityId)
+                .ForeignKey("dbo.Groups", t => t.GroupId, cascadeDelete: true)
+                .ForeignKey("dbo.AspNetUsers", t => t.UserId)
+                .Index(t => t.GroupId)
+                .Index(t => t.UserId);
             
             CreateTable(
                 "dbo.Groups",
@@ -32,6 +40,15 @@ namespace DigitalSchoolGroups.Migrations
                 .ForeignKey("dbo.AspNetUsers", t => t.GroupAdmin_Id)
                 .Index(t => t.CategoryId)
                 .Index(t => t.GroupAdmin_Id);
+            
+            CreateTable(
+                "dbo.Categories",
+                c => new
+                    {
+                        CategoryId = c.Int(nullable: false, identity: true),
+                        CategoryName = c.String(nullable: false),
+                    })
+                .PrimaryKey(t => t.CategoryId);
             
             CreateTable(
                 "dbo.AspNetUsers",
@@ -143,15 +160,31 @@ namespace DigitalSchoolGroups.Migrations
                 .Index(t => t.ApplicationUser_Id)
                 .Index(t => t.Group_Id);
             
+            CreateTable(
+                "dbo.ApplicationUserGroup2",
+                c => new
+                    {
+                        ApplicationUser_Id = c.String(nullable: false, maxLength: 128),
+                        Group_Id = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => new { t.ApplicationUser_Id, t.Group_Id })
+                .ForeignKey("dbo.AspNetUsers", t => t.ApplicationUser_Id, cascadeDelete: true)
+                .ForeignKey("dbo.Groups", t => t.Group_Id, cascadeDelete: true)
+                .Index(t => t.ApplicationUser_Id)
+                .Index(t => t.Group_Id);
+            
         }
         
         public override void Down()
         {
             DropForeignKey("dbo.AspNetUserRoles", "RoleId", "dbo.AspNetRoles");
+            DropForeignKey("dbo.Activities", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.Messages", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.Messages", "GroupId", "dbo.Groups");
             DropForeignKey("dbo.Groups", "GroupAdmin_Id", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserRoles", "UserId", "dbo.AspNetUsers");
+            DropForeignKey("dbo.ApplicationUserGroup2", "Group_Id", "dbo.Groups");
+            DropForeignKey("dbo.ApplicationUserGroup2", "ApplicationUser_Id", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserLogins", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.ApplicationUserGroup1", "Group_Id", "dbo.Groups");
             DropForeignKey("dbo.ApplicationUserGroup1", "ApplicationUser_Id", "dbo.AspNetUsers");
@@ -159,6 +192,9 @@ namespace DigitalSchoolGroups.Migrations
             DropForeignKey("dbo.ApplicationUserGroups", "ApplicationUser_Id", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserClaims", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.Groups", "CategoryId", "dbo.Categories");
+            DropForeignKey("dbo.Activities", "GroupId", "dbo.Groups");
+            DropIndex("dbo.ApplicationUserGroup2", new[] { "Group_Id" });
+            DropIndex("dbo.ApplicationUserGroup2", new[] { "ApplicationUser_Id" });
             DropIndex("dbo.ApplicationUserGroup1", new[] { "Group_Id" });
             DropIndex("dbo.ApplicationUserGroup1", new[] { "ApplicationUser_Id" });
             DropIndex("dbo.ApplicationUserGroups", new[] { "Group_Id" });
@@ -173,6 +209,9 @@ namespace DigitalSchoolGroups.Migrations
             DropIndex("dbo.AspNetUsers", "UserNameIndex");
             DropIndex("dbo.Groups", new[] { "GroupAdmin_Id" });
             DropIndex("dbo.Groups", new[] { "CategoryId" });
+            DropIndex("dbo.Activities", new[] { "UserId" });
+            DropIndex("dbo.Activities", new[] { "GroupId" });
+            DropTable("dbo.ApplicationUserGroup2");
             DropTable("dbo.ApplicationUserGroup1");
             DropTable("dbo.ApplicationUserGroups");
             DropTable("dbo.AspNetRoles");
@@ -181,8 +220,9 @@ namespace DigitalSchoolGroups.Migrations
             DropTable("dbo.AspNetUserLogins");
             DropTable("dbo.AspNetUserClaims");
             DropTable("dbo.AspNetUsers");
-            DropTable("dbo.Groups");
             DropTable("dbo.Categories");
+            DropTable("dbo.Groups");
+            DropTable("dbo.Activities");
         }
     }
 }

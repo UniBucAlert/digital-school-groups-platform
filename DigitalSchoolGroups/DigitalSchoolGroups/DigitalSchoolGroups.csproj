@@ -178,9 +178,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202012111009113_InitialUpdate-Database.cs" />
-    <Compile Include="Migrations\202012111009113_InitialUpdate-Database.Designer.cs">
-      <DependentUpon>202012111009113_InitialUpdate-Database.cs</DependentUpon>
+    <Compile Include="Migrations\202012152011239_Initial.cs" />
+    <Compile Include="Migrations\202012152011239_Initial.Designer.cs">
+      <DependentUpon>202012152011239_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -266,9 +266,15 @@
     <Content Include="Views\Users\Index.cshtml" />
     <Content Include="Views\Users\Edit.cshtml" />
     <Content Include="Views\Users\Show.cshtml" />
+    <Content Include="Views\Activities\Index.cshtml" />
+    <Content Include="Views\Activities\Show.cshtml" />
+    <Content Include="Views\Activities\Edit.cshtml" />
+    <Content Include="Views\Activities\New.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Views\Activities\" />
+    <EmbeddedResource Include="Migrations\202012152011239_Initial.resx">
+      <DependentUpon>202012152011239_Initial.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -282,11 +288,6 @@
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.3.1.min.map" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\202012111009113_InitialUpdate-Database.resx">
-      <DependentUpon>202012111009113_InitialUpdate-Database.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
