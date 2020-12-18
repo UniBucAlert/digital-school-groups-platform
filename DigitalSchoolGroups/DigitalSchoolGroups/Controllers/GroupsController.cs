@@ -45,6 +45,7 @@ namespace DigitalSchoolGroupsPlatform.Controllers
 
             ViewBag.Groups = paginatedGroups;
             ViewBag.currentUserObject = db.Users.Find(User.Identity.GetUserId());
+            ViewBag.IsAdmin = User.IsInRole("Admin");
 
             return View();
         }
@@ -114,12 +115,20 @@ namespace DigitalSchoolGroupsPlatform.Controllers
         {
             Group group = db.Groups.Find(groupId);
             ApplicationUser user = db.Users.Find(userId);
-            user.DeleteJoinRequest(group);
+            if ((GetCurrentUser().IsModeratorOf(group) && user.RequestedToJoin(group)) || User.IsInRole("Admin"))
+            {
+                user.DeleteJoinRequest(group);
 
-            user.Groups.Add(group);
-            group.Users.Add(user);
+                user.Groups.Add(group);
+                group.Users.Add(user);
 
-            db.SaveChanges();
+                db.SaveChanges();
+            }
+            else
+            {
+                TempData["message"] = "You do not have the rights to accept this join request!";
+                return RedirectToAction("Index");
+            }
 
             return RedirectToAction("Show/" + groupId);
         }
@@ -132,8 +141,16 @@ namespace DigitalSchoolGroupsPlatform.Controllers
         {
             Group group = db.Groups.Find(groupId);
             ApplicationUser user = db.Users.Find(userId);
-            user.DeleteJoinRequest(group);
-            db.SaveChanges();
+            if ((GetCurrentUser().IsModeratorOf(group) && user.RequestedToJoin(group)) || User.IsInRole("Admin"))
+            {
+                user.DeleteJoinRequest(group);
+                db.SaveChanges();
+            }
+            else
+            {
+                TempData["message"] = "You do not have the rights to delete this join request!";
+                return RedirectToAction("Index");
+            }
 
             return RedirectToAction("Show/" + groupId);
         }
@@ -143,10 +160,18 @@ namespace DigitalSchoolGroupsPlatform.Controllers
         {
             Group group = db.Groups.Find(id);
 
-            // Setez drepturile de acces.
-            SetAccessRights();
+            if (GetCurrentUser().IsInGroup(group) || User.IsInRole("Admin"))
+            {
+                // Setez drepturile de acces.
+                SetAccessRights();
 
-            return View(group);
+                return View(group);
+            }
+            else
+            {
+                TempData["message"] = "You do not have the rights to view these members!";
+                return RedirectToAction("Index");
+            }
         }
 
         [HttpDelete]
@@ -157,10 +182,17 @@ namespace DigitalSchoolGroupsPlatform.Controllers
             Group group = db.Groups.Find(groupId);
             ApplicationUser user = db.Users.Find(userId);
 
-            user.Groups.Remove(group);
-            group.Users.Remove(user);
-
-            db.SaveChanges();
+            if ((GetCurrentUser().IsModeratorOf(group) && user.IsInGroup(group)) || User.IsInRole("Admin"))
+            {
+                user.Groups.Remove(group);
+                group.Users.Remove(user);
+                db.SaveChanges();
+            }
+            else
+            {
+                TempData["message"] = "You do not have the rights to kick this member!";
+                return RedirectToAction("Index");
+            }
 
             return RedirectToAction("Members/" + groupId);
         }
@@ -173,22 +205,30 @@ namespace DigitalSchoolGroupsPlatform.Controllers
             Group group = db.Groups.Find(groupId);
             ApplicationUser user = db.Users.Find(userId);
 
-            if (user.IsModeratorOf(group))
+            if ((GetCurrentUser().IsModeratorOf(group) && user.IsInGroup(group)) || User.IsInRole("Admin"))
             {
-                user.Groups.Add(group);
-                group.Users.Add(user);
-                user.ModeratorOf.Remove(group);
-                group.Moderators.Remove(user);
+                if (user.IsModeratorOf(group))
+                {
+                    user.Groups.Add(group);
+                    group.Users.Add(user);
+                    user.ModeratorOf.Remove(group);
+                    group.Moderators.Remove(user);
+                }
+                else
+                {
+                    user.Groups.Remove(group);
+                    group.Users.Remove(user);
+                    user.ModeratorOf.Add(group);
+                    group.Moderators.Add(user);
+                }
+
+                db.SaveChanges();
             }
             else
             {
-                user.Groups.Remove(group);
-                group.Users.Remove(user);
-                user.ModeratorOf.Add(group);
-                group.Moderators.Add(user);
+                TempData["message"] = "You do not have the rights to edit this role!";
+                return RedirectToAction("Index");
             }
-
-            db.SaveChanges();
 
             return RedirectToAction("Members/" + groupId);
         }
