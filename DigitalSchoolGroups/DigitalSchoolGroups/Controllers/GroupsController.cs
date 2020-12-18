@@ -182,10 +182,19 @@ namespace DigitalSchoolGroupsPlatform.Controllers
             Group group = db.Groups.Find(groupId);
             ApplicationUser user = db.Users.Find(userId);
 
-            if ((GetCurrentUser().IsModeratorOf(group) && user.IsInGroup(group)) || User.IsInRole("Admin"))
+            if (GetCurrentUser().IsModeratorOf(group) || User.IsInRole("Admin"))
             {
-                user.Groups.Remove(group);
-                group.Users.Remove(user);
+                if (user.IsModeratorOf(group))
+                {
+                    user.ModeratorOf.Remove(group);
+                    group.Moderators.Remove(user);
+                }
+                else if (user.IsInGroup(group))
+                {
+                    user.Groups.Remove(group);
+                    group.Users.Remove(user);
+                }
+                
                 db.SaveChanges();
             }
             else
