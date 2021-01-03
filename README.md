@@ -2,7 +2,7 @@
 
 ## Functionalitati
 - sa existe **4 tipuri de utilizatori**: vizitator neinregistrat, utilizator inregistrat, moderator si administrator. (0.5p :heavy_check_mark:) 
-- orice utilizator poate cauta **grupuri** in platforma (0.5p - TO DO!) si poate vizualiza informatii despre grupul respectiv. (0.5p :heavy_check_mark:) Grupurile vor fi impartite pe **categorii**: muzica, hobby-uri, cultura, etc (create dinamic), existand posibilitatea de adaugare a noi categorii (adminul poate face CRUD pe categorii). (0.5p :heavy_check_mark:)
+- orice utilizator poate cauta **grupuri** in platforma (0.5p :heavy_check_mark:) si poate vizualiza informatii despre grupul respectiv. (0.5p :heavy_check_mark:) Grupurile vor fi impartite pe **categorii**: muzica, hobby-uri, cultura, etc (create dinamic), existand posibilitatea de adaugare a noi categorii (adminul poate face CRUD pe categorii). (0.5p :heavy_check_mark:)
 - utilizatorii inregistrati pot crea grupuri noi sau se pot alatura altor grupuri. (1.0p :heavy_check_mark:). Utilizatorul care a creat un grup devine implicit **moderatorul** grupului respectiv (ceea ce inseamna ca poate sterge grupul daca doreste). (1.0p :heavy_check_mark:)
 - moderatorul grupului poate accepta membrii noi sau poate revoca membrii care au un comportament neadecvat. Moderatorul poate sa permita **dreptul de moderare** si altor membrii ai grupului. (1.0p :heavy_check_mark:)
 - membrii unui grup pot adauga **mesaje** si pot adauga noi **activitati** in calendarul grupului. De asemenea, pot sterge si edita propriile mesaje. (1.5p :heavy_check_mark: - Obs: date picker WIP!)
