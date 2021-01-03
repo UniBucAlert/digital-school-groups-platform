@@ -4,6 +4,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -21,7 +22,37 @@ namespace DigitalSchoolGroupsPlatform.Controllers
         [Authorize(Roles = "User,Editor,Admin")]
         public ActionResult Index()
         {
-            var groups = db.Groups.Include("Category").Include("GroupAdmin").OrderBy(a => a.DateCreated);
+            var groups = db.Groups.Include("Category").Include("GroupAdmin").OrderBy(g => g.DateCreated);
+            var search = "";
+
+            if (Request.Params.Get("search") != null)
+            {
+                // Trim whitespace from search string.
+                search = Request.Params.Get("search").Trim();
+
+                // Search in groups (title and description)
+                List<int> groupsIds = db.Groups.Where(
+                    group => group.Title.Contains(search)
+                    || group.Description.Contains(search)
+                    ).Select(g => g.Id).ToList();
+
+                // Search in messages (content)
+                List<int> messagesIds = db.Messages.Where(
+                    mes => mes.Content.Contains(search)
+                    ).Select(m => m.GroupId).ToList();
+
+                // Extra: Search in activities (title and description)
+
+                // Unique list of groups
+                List<int> mergedIds = groupsIds.Union(messagesIds).ToList();
+
+                // List of groups that contain the search string either in
+                // group title, description or messages
+                groups = db.Groups.Where(
+                    group => mergedIds.Contains(group.Id)
+                    ).Include("Category").Include("GroupAdmin").OrderBy(g => g.DateCreated);
+            }
+
             var totalItems = groups.Count();
             var currentPage = Convert.ToInt32(Request.Params.Get("page"));
 
