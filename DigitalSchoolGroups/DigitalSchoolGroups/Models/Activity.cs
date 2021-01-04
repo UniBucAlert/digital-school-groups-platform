@@ -14,7 +14,7 @@ namespace DigitalSchoolGroupsPlatform.Models
 
         [Required(ErrorMessage = "Title cannot be left empty!")]
         public string Title { get; set; }
-        // o validare ceva..
+        [Required(ErrorMessage = "Description cannot be left empty!")]
         public string Description { get; set; }
 
         // Pentru a afisa doar data se poate adauga o astfel de validare,
