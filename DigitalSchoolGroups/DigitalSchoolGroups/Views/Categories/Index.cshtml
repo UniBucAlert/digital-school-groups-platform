@@ -1,17 +1,26 @@
-﻿
+﻿<h2>School Groups Categories</h2>
+<hr />
+
 @if (TempData.ContainsKey("message"))
 {
     <h3 class="alert alert-info" role="alert">@ViewBag.Message</h3>
 }
 
-<h2>School Groups Categories</h2>
-
-@foreach (var category in ViewBag.Categories)
-{
-    <h2>@category.CategoryName</h2>
-    <a class="btn btn-success" href="/Categories/Show/@category.CategoryId">Show category</a>
-    @*<a class="btn btn-success" href="/Categories/Edit/@category.CategoryId">Edit category</a>*@
-    <br />
-    <hr />
-    <br />
-}
+<div class="container">
+    <div class="row">
+        @foreach (var category in ViewBag.Categories)
+        {
+            <div class="col-md-4">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <i class="glyphicon glyphicon-paperclip"></i>
+                        @category.CategoryName
+                    </div>
+                    <div class="panel-footer">
+                        <a class="btn btn-default btn-sm" href="/Categories/Show/@category.CategoryId">Show category</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
