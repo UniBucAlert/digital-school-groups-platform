@@ -31,12 +31,14 @@
                     @if (User.IsInRole("Editor") || User.IsInRole("Admin"))
                     {
                         <li>@Html.ActionLink("Show groups", "Index", "Groups")</li>
+                        <li>@Html.ActionLink("My groups", "My", "Groups")</li>
                         <li>@Html.ActionLink("Add group", "New", "Groups")</li>
                     }
 
                     @if (User.IsInRole("User"))
                     {
                         <li>@Html.ActionLink("Show groups", "Index", "Groups")</li>
+                        <li>@Html.ActionLink("My groups", "My", "Groups")</li>
                     }
 
                 </ul>

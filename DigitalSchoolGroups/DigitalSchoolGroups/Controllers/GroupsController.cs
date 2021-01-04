@@ -81,6 +81,40 @@ namespace DigitalSchoolGroupsPlatform.Controllers
             return View();
         }
 
+        public ActionResult My()
+        {
+            var currentUserObject = db.Users.Find(User.Identity.GetUserId());
+            var groups = db.Groups.Include("Category").Include("GroupAdmin").
+                         OrderBy(a => a.DateCreated).ToList().
+                         Where(gr => currentUserObject.IsInGroup(gr) || User.IsInRole("Admin"));
+            var totalItems = groups.Count();
+            var currentPage = Convert.ToInt32(Request.Params.Get("page"));
+
+            var offset = 0;
+
+            if (!currentPage.Equals(0))
+            {
+                offset = (currentPage - 1) * this._perPage;
+            }
+
+            var paginatedGroups = groups.Skip(offset).Take(this._perPage);
+
+            if (TempData.ContainsKey("message"))
+            {
+                ViewBag.Message = TempData["message"].ToString();
+            }
+
+            //ViewBag.perPage = this._perPage;
+            ViewBag.total = totalItems;
+            ViewBag.lastPage = Math.Ceiling((float)totalItems / (float)this._perPage);
+
+            ViewBag.Groups = paginatedGroups;
+            ViewBag.currentUserObject = currentUserObject;
+            ViewBag.IsAdmin = User.IsInRole("Admin");
+
+            return View();
+        }
+
         private ApplicationUser GetCurrentUser()
         {
             return db.Users.Find(User.Identity.GetUserId());
