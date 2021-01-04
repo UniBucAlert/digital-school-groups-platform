@@ -10,7 +10,7 @@
     @if ((ViewBag.currentUserObject.IsModeratorOf(Model) && ViewBag.showButtons) || ViewBag.isAdmin)
     {
         <div class="panel-footer">
-            <a class="btn btn-info btn-sms pull-left" href="/Groups/Edit/@Model.Id">Edit</a>
+            <a class="btn btn-info btn-sm pull-left" href="/Groups/Edit/@Model.Id">Edit</a>
 
             @using (Html.BeginForm(actionName: "Delete", controllerName: "Groups",
                 method: FormMethod.Post, routeValues: new { id = Model.Id }))

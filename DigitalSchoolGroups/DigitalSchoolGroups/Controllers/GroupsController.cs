@@ -16,7 +16,7 @@ namespace DigitalSchoolGroupsPlatform.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // Number of groups to show on one page.
-        private int _perPage = 6;
+        private int _perPage = 5;
 
         // ----------READ----------
         [Authorize(Roles = "User,Editor,Admin")]
