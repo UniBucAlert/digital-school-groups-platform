@@ -13,8 +13,12 @@ namespace DigitalSchoolGroupsPlatform.Models
         public int ActivityId { get; set; }
 
         [Required(ErrorMessage = "Title cannot be left empty!")]
+        [StringLength(100, ErrorMessage =
+            "Activity title cannot contain more than 100 characters!")]
         public string Title { get; set; }
+
         [Required(ErrorMessage = "Description cannot be left empty!")]
+        [DataType(DataType.MultilineText)]
         public string Description { get; set; }
 
         // Pentru a afisa doar data se poate adauga o astfel de validare,

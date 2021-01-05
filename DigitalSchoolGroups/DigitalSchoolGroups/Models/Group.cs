@@ -24,6 +24,7 @@ namespace DigitalSchoolGroupsPlatform.Models
         [DataType(DataType.MultilineText)]
         public string Description { get; set; }
 
+        [DataType(DataType.Date)]
         public DateTime DateCreated { get; set; }
 
         // Foreign Key "CategoryId", mapped to Category Model 
