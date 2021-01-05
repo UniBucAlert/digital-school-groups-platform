@@ -1,49 +1,104 @@
-﻿<h2>Members</h2>
+﻿<h2>Group Members</h2>
+<hr />
 
-<h2>Group creator: @Model.GroupAdmin.UserName</h2>
+<h3>Group creator</h3>
+<hr />
 
-<h2>Group moderators</h2>
-@foreach (DigitalSchoolGroups.Models.ApplicationUser moderator in Model.Moderators)
-{
-    <h3>Email: @moderator.UserName </h3>
-    <h4>Actions: </h4>
-    if (ViewBag.currentUserObject.IsModeratorOf(Model) || ViewBag.showButtons)
-    {
-        <form method="post" action="/Groups/Members" style="display:inline;">
-            @Html.HttpMethodOverride(HttpVerbs.Delete)
-            <input type="hidden" name="groupId" value="@Model.Id" />
-            <input type="hidden" name="userId" value="@moderator.Id" />
-            <button class="btn btn-danger btn-sm" type="submit">Kick</button>
-        </form>
-        <form method="post" action="/Groups/Members" style="display:inline;">
-            @Html.HttpMethodOverride(HttpVerbs.Put)
-            <input type="hidden" name="groupId" value="@Model.Id" />
-            <input type="hidden" name="userId" value="@moderator.Id" />
-            <button class="btn-success btn-sm" type="submit">Make member</button>
-        </form>
-    }
-    <br />
-}
+<div class="container">
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <div class="col-md-10 col-md-offset-1">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <i class="glyphicon glyphicon-user"></i>&nbsp;@Model.GroupAdmin.UserName
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-<h2>Group members</h2>
-@foreach (DigitalSchoolGroups.Models.ApplicationUser member in Model.Users)
-{
-    <h3>Email: @member.UserName </h3>
-    <h4>Actions: </h4>
-    if (ViewBag.currentUserObject.IsModeratorOf(Model) || ViewBag.showButtons)
-    {
-        <form method="post" action="/Groups/Members" style="display:inline;">
-            @Html.HttpMethodOverride(HttpVerbs.Delete)
-            <input type="hidden" name="groupId" value="@Model.Id" />
-            <input type="hidden" name="userId" value="@member.Id" />
-            <button class="btn btn-danger btn-sm" type="submit">Kick</button>
-        </form>
-        <form method="post" action="/Groups/Members" style="display:inline;">
-            @Html.HttpMethodOverride(HttpVerbs.Put)
-            <input type="hidden" name="groupId" value="@Model.Id" />
-            <input type="hidden" name="userId" value="@member.Id" />
-            <button class="btn-success btn-sm" type="submit">Make moderator</button>
-        </form>
-    }
-    <br />
-}
+<h3>Group moderators</h3>
+<hr />
+<div class="container">
+    <div class="row">
+        @foreach (DigitalSchoolGroups.Models.ApplicationUser moderator in Model.Moderators)
+        {
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        <div class="col-md-10 col-md-offset-1">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <i class="glyphicon glyphicon-user"></i>&nbsp;@moderator.UserName
+                                </div>
+                                @if (ViewBag.currentUserObject.IsModeratorOf(Model) || ViewBag.showButtons)
+                                {
+                                    <div class="panel-footer">
+                                        <form method="post" action="/Groups/Members">
+                                            @Html.HttpMethodOverride(HttpVerbs.Put)
+                                            <input type="hidden" name="groupId" value="@Model.Id" />
+                                            <input type="hidden" name="userId" value="@moderator.Id" />
+                                            <button class="btn btn-info btn-sm pull-left" type="submit">Make member</button>
+                                        </form>
+
+                                        <form method="post" action="/Groups/Members">
+                                            @Html.HttpMethodOverride(HttpVerbs.Delete)
+                                            <input type="hidden" name="groupId" value="@Model.Id" />
+                                            <input type="hidden" name="userId" value="@moderator.Id" />
+                                            <button class="btn btn-danger btn-sm pull-right" type="submit">Kick</button>
+                                        </form>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<h3>Group members</h3>
+<hr />
+<div class="container">
+    <div class="row">
+        @foreach (DigitalSchoolGroups.Models.ApplicationUser member in Model.Users)
+        {
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        <div class="col-md-10 col-md-offset-1">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <i class="glyphicon glyphicon-user"></i>&nbsp;@member.UserName
+                                </div>
+                                @if (ViewBag.currentUserObject.IsModeratorOf(Model) || ViewBag.showButtons)
+                                {
+                                    <div class="panel-footer">
+                                        <form method="post" action="/Groups/Members">
+                                            @Html.HttpMethodOverride(HttpVerbs.Delete)
+                                            <input type="hidden" name="groupId" value="@Model.Id" />
+                                            <input type="hidden" name="userId" value="@member.Id" />
+                                            <button class="btn btn-danger btn-sm pull-right" type="submit">Kick</button>
+                                        </form>
+                                        <form method="post" action="/Groups/Members">
+                                            @Html.HttpMethodOverride(HttpVerbs.Put)
+                                            <input type="hidden" name="groupId" value="@Model.Id" />
+                                            <input type="hidden" name="userId" value="@member.Id" />
+                                            <button class="btn btn-info btn-sm pull-left" type="submit">Make moderator</button>
+                                        </form>
+
+                                        <div class="clearfix"></div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+<br />
