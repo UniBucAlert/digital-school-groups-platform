@@ -14,13 +14,40 @@ namespace DigitalSchoolGroups.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
+        // Number of users to show on one page.
+        private int _perPage = 6;
+
         // GET: Users
         public ActionResult Index()
         {
             var users = from user in db.Users
                         orderby user.UserName
                         select user;
-            ViewBag.UsersList = users;
+            //ViewBag.UsersList = users;
+
+            var totalItems = users.Count();
+            var currentPage = Convert.ToInt32(Request.Params.Get("page"));
+
+            var offset = 0;
+
+            if (!currentPage.Equals(0))
+            {
+                offset = (currentPage - 1) * this._perPage;
+            }
+
+            var paginatedUsers = users.Skip(offset).Take(this._perPage);
+
+            if (TempData.ContainsKey("message"))
+            {
+                ViewBag.Message = TempData["message"].ToString();
+            }
+
+            //ViewBag.perPage = this._perPage;
+            ViewBag.total = totalItems;
+            ViewBag.lastPage = Math.Ceiling((float)totalItems / (float)this._perPage);
+
+            ViewBag.UsersList = paginatedUsers;
+
             return View();
         }
 
@@ -97,6 +124,7 @@ namespace DigitalSchoolGroups.Controllers
 
                     db.SaveChanges();
                 }
+                TempData["message"] = "The user info has been updated.";
                 return RedirectToAction("Index");
             }
             catch (Exception e)
@@ -149,6 +177,8 @@ namespace DigitalSchoolGroups.Controllers
             // Commit pe groups
             db.SaveChanges();
             UserManager.Delete(user);
+
+            TempData["message"] = "The user has been deleted.";
             return RedirectToAction("Index");
         }
     }

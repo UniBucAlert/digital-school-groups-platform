@@ -11,11 +11,16 @@
 <h2>@ViewBag.Title</h2>
 <hr />
 
+@if (TempData.ContainsKey("message"))
+{
+    <h3 class="alert alert-info" role="alert">@ViewBag.Message</h3>
+}
+
 <div class="container">
     <div class="row">
         @foreach (var user in ViewBag.UsersList)
         {
-            <div class="col-md-10 col-md-offset-1">
+            <div class="col-md-6">
                 <div class="panel panel-primary">
                     <div class="panel-heading">
                         <i class="glyphicon glyphicon-user"></i>&nbsp;@user.UserName
@@ -24,10 +29,10 @@
                     <div class="panel-body">
                         <i class="glyphicon glyphicon-envelope"></i>&nbsp;User's email:
                         <span class="label label-default">@user.Email</span>
-                        <br /><br />
-
+                        
                         @if (@user.PhoneNumber != null)
                         {
+                            <br />
                             <i class="glyphicon glyphicon-phone"></i>@:&nbsp;User's phone:
                             <span class="label label-default">@user.PhoneNumber</span>
                         }
@@ -41,4 +46,27 @@
             </div>
         }
     </div>
+</div>
+
+<div>
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            <li>
+                <a href="/Users/Index?page=1" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+
+            @for (int i = 1; i <= ViewBag.lastPage; i++)
+            {
+                <li><a href="/Users/Index?page=@i">@(i)</a></li>
+            }
+
+            <li>
+                <a href="/Users/Index?page=@(ViewBag.lastPage)" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
 </div>
