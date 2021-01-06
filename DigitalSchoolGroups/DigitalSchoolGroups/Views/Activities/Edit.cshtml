@@ -1,10 +1,6 @@
 ﻿@model DigitalSchoolGroupsPlatform.Models.Activity
 
-@{
-    ViewBag.Title = "Edit activity";
-}
-
-<h2>@ViewBag.Title </h2>
+<h2>Edit activity</h2>
 
 <form method="post" action="/Activities/Edit/@Model.ActivityId">
     @Html.HttpMethodOverride(HttpVerbs.Put)
